@@ -66,9 +66,10 @@ function Header({ customHeaderComponentStyles }: { customHeaderComponentStyles?:
               }
               containerStyles="min-w-[6rem] header-popover-content"
               list={["Log out"]}
-              renderItem={(item) => {
+              renderItem={(item, idx) => {
                 return (
                   <div
+                    key={idx}
                     className="row-flex-btwn py-2.5 px-3 w-full cursor-pointer gap-3"
                     onClick={onLogout}
                   >
