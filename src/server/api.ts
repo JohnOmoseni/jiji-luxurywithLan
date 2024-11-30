@@ -4,11 +4,11 @@ import { handleApiError } from "@/lib";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_DOMAIN || "",
+  // @ts-ignore
   prepareHeaders: (headers, { getState }) => {
-    const token = sessionStorage.getItem("token");
+    const token = JSON.parse(sessionStorage.getItem("skymeasures-token") || "");
 
-    token &&
-      headers.set("Authorization", `Bearer 6|PusopccWtvcuq1QW8D5UjFjnLnvymIFOseLunPUAc54a1bd9`);
+    token && headers.set("Authorization", `Bearer ${token}`);
 
     return headers;
   },

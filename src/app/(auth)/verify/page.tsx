@@ -1,55 +1,80 @@
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button from "@/components/reuseables/CustomButton";
 
 function VerifyOTP() {
   const { handleVerifyOtp, handleResendOtp, isLoadingAuth, user } = useAuth();
   const [otpValue, setOtpValue] = useState("");
-  const [error, setError] = useState("");
-  const [resendCountdown, setResendCountdown] = useState(180);
-  const [isResendingOtp, setIsResendingOtp] = useState(false);
-  const [isCountdownActive, setIsCountdownActive] = useState(false);
-  const [isResendRequested, setIsResendRequested] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [otpState, setOtpState] = useState({
+    countdown: 180,
+    isResending: false,
+    isCountdownActive: false,
+  });
 
   useEffect(() => {
-    if (isCountdownActive && resendCountdown > 0) {
-      const interval = setInterval(() => {
-        setResendCountdown((prev) => prev - 1);
+    const sendInitialOtp = async () => {
+      try {
+        await handleResendOtp(user?.email || "");
+        setOtpState((prev) => ({
+          ...prev,
+          countdown: 180,
+          isCountdownActive: true,
+        }));
+      } catch (e) {
+        setError("Failed to send verification code. Please try again.");
+      }
+    };
+
+    sendInitialOtp();
+  }, [handleResendOtp, user?.email]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (otpState.isCountdownActive && otpState.countdown > 0) {
+      interval = setInterval(() => {
+        setOtpState((prev) => ({
+          ...prev,
+          countdown: prev.countdown - 1,
+          isCountdownActive: prev.countdown > 1,
+        }));
       }, 1000);
-      return () => clearInterval(interval);
-    } else if (resendCountdown === 0) {
-      setIsCountdownActive(false);
     }
-  }, [isCountdownActive, resendCountdown]);
 
-  const handleVerifySubmit = async () => {
-    setError("");
+    return () => clearInterval(interval);
+  }, [otpState.isCountdownActive, otpState.countdown]);
+
+  const handleVerifySubmit = useCallback(async () => {
+    if (!user?.email) return;
+    setError(null);
 
     try {
-      await handleVerifyOtp(Number(otpValue), user?.email || "");
+      await handleVerifyOtp(Number(otpValue), user.email);
     } catch (e) {
-      setError("Failed to verify OTP.");
+      setError("Invalid verification code. Please try again.");
     }
-  };
+  }, [handleVerifyOtp, otpValue, user?.email]);
 
-  const handleResend = async () => {
-    if (isResendingOtp) return;
-    setError("");
-    setIsResendingOtp(true);
+  const handleResend = useCallback(async () => {
+    if (otpState.isResending || !user?.email) return;
+    setError(null);
 
+    setOtpState((prev) => ({ ...prev, isResending: true }));
     try {
-      await handleResendOtp(user?.email || "");
-      setResendCountdown(180);
-      setIsCountdownActive(true);
-      setIsResendRequested(true);
+      await handleResendOtp(user.email);
+      setOtpState({
+        countdown: 180,
+        isResending: false,
+        isCountdownActive: true,
+      });
     } catch (e) {
-      setError("Failed to resend OTP. Please try again.");
-    } finally {
-      setIsResendingOtp(false);
+      setError("Failed to resend verification code. Please try again.");
+      setOtpState((prev) => ({ ...prev, isResending: false }));
     }
-  };
+  }, [handleResendOtp, otpState.isResending, user?.email]);
 
   return (
     <>
@@ -64,7 +89,7 @@ function VerifyOTP() {
         </p>
       </div>
 
-      <div className="pt-4 pb-6">
+      <div className="pt-3 pb-6">
         <div className="flex-column gap-3">
           <InputOTP maxLength={4} value={otpValue} onChange={(value) => setOtpValue(value)}>
             <InputOTPGroup className="shad-otp">
@@ -80,18 +105,18 @@ function VerifyOTP() {
           )}
 
           <div className="">
-            {!isResendRequested ? (
+            {!otpState.isCountdownActive ? (
               <span className="font-semibold text-secondary cursor-pointer" onClick={handleResend}>
-                {isResendingOtp ? "Resending..." : "Resend OTP"}
+                {otpState.isResending ? "Resending..." : "Resend OTP"}
               </span>
             ) : (
               <p className="mt-0.5 leading-5 text-foreground-100 tracking-wide">
                 Resend code in:{" "}
                 <span className="text-secondary inline-flex font-normal">
-                  {Math.floor(resendCountdown / 60)
+                  {Math.floor(otpState.countdown / 60)
                     .toString()
                     .padStart(2, "0")}
-                  :{(resendCountdown % 60).toString().padStart(2, "0")}
+                  :{(otpState.countdown % 60).toString().padStart(2, "0")}
                 </span>
               </p>
             )}

@@ -40,7 +40,7 @@ export const convertFileToUrl = (file: File) => URL.createObjectURL(file);
 // Function to generate initial values for PostProperty
 export const generateInitialValues = (
   categoryType: CategoryTypes | null,
-  data?: any
+  _data?: any
 ): { [key: string]: any } => {
   // Dynamic fields based on category type, if any
   const dynamicFields = categoryFields[categoryType || ""]?.reduce((acc, field) => {

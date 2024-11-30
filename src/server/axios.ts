@@ -12,10 +12,10 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = sessionStorage.getItem("token");
+    const token = JSON.parse(sessionStorage.getItem("skymeasures-token") || "");
 
     if (token) {
-      config.headers.Authorization = `Bearer 6|PusopccWtvcuq1QW8D5UjFjnLnvymIFOseLunPUAc54a1bd9`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;

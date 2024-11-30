@@ -2,7 +2,7 @@ import api from "../api";
 
 export const messagingSlice = api.injectEndpoints({
   endpoints: (builder) => ({
-    getChats: builder.query({
+    getAllChats: builder.query({
       query: () => `/chats`,
       providesTags: (result) => {
         // Map over the result to provide tags for each chat
@@ -59,27 +59,15 @@ export const messagingSlice = api.injectEndpoints({
       }),
       invalidatesTags: () => [{ type: "Chat" }] as any,
     }),
-
-    deleteListing: builder.mutation({
-      query: ({ chat_id }) => ({
-        url: `/chats/${chat_id}`,
-        method: "DELETE",
-      }),
-      invalidatesTags: (_result, _error, { chat_id }) => [
-        { type: "Chat", id: chat_id }, // Invalidate the specific listing
-        { type: "Chat", id: "LIST" }, // Invalidate the entire query
-      ],
-    }),
   }),
   overrideExisting: false, // To avoid overwriting existing endpoints
 });
 
 export const {
-  useGetChatsQuery,
+  useGetAllChatsQuery,
   useGetChatByIDQuery,
   useFetchChatMsgsQuery,
   useStartChatMutation,
   useSendMessageInChatMutation,
   useUpdateMessageMutation,
-  useDeleteListingMutation,
 } = messagingSlice;

@@ -10,6 +10,7 @@ function ChatInput() {
   const { chatLog } = useAppSelector((state) => state.chat);
   const [text, setText] = useState("");
   const [sendMessageMutation] = useSendMessageInChatMutation();
+  // @ts-ignore
   const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<string[]>([]);
 
@@ -59,7 +60,7 @@ function ChatInput() {
     const chat = {
       type: "msg",
       message: msg,
-      incoming: "true",
+      outgoing: "true",
       images: preview,
     };
 

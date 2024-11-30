@@ -1,7 +1,7 @@
 import Button from "@/components/reuseables/CustomButton";
 import Filters from "@/components/reuseables/filters";
 import TableGlobalSearch from "@/components/reuseables/TableGlobalSearch";
-import { categoryFields, locationCategories, vehicleCategories } from "@/constants";
+import { categoryFields, locationCategories } from "@/constants";
 import { SearchIcon } from "@/constants/icons";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/types";

@@ -13,7 +13,7 @@ import {
   Verified,
 } from "@/constants/icons";
 import { useGetItemByIDQuery } from "@/server/actions/market";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useFormik } from "formik";
@@ -45,11 +45,7 @@ function Details() {
   const details = useMemo(
     () => ({
       name: item?.name || "BMW 328i 2012 Black",
-      location: item?.state_name
-        ? `${item.state_name}${
-            item?.lga_name ? `, ${item.lga_name}` : item?.district ? `, ${item.district}` : ""
-          }`
-        : "Unknown",
+      location: item?.address ? `${item?.address ? `${item.address}` : ""}` : "Unknown",
       mediaImages: [
         item?.main_thumbnail,
         ...(item?.other_media?.map((media: any) => media.file_url) || []),
@@ -75,6 +71,7 @@ function Details() {
 
   const asideInfo = useMemo(
     () => ({
+      id: item?.id,
       amount: item?.actual_amount || "N/A",
       sellerName: item?.seller_name || "Unknown",
       ownerWhatsapp: item?.phone_number,
@@ -162,7 +159,7 @@ function Details() {
             </section>
 
             <aside className="w-full md:w-72 space-y-4">
-              <Aside info={asideInfo} />
+              <Aside info={asideInfo} listing={item} />
             </aside>
           </div>
         )}
@@ -175,16 +172,21 @@ function Details() {
 
 export default Details;
 
-const Aside = ({ info }: { info: any }) => {
+const Aside = ({ info, listing }: { info: any; listing?: any }) => {
   const [showRequestCallback, setShowRequestCallback] = useState(false);
   const [showContact, setShowContact] = useState(false);
+  const navigate = useNavigate();
 
-  const handleShowContact = () => {
-    const phoneNumber = "08103011365";
-    const whatsappURL = `https://wa.me/${phoneNumber}`;
+  // const handleShowContact = () => {
+  //   const phoneNumber = "08103011365";
+  //   const whatsappURL = `https://wa.me/${phoneNumber}`;
 
-    // Opens WhatsApp
-    window.open(whatsappURL, "_blank");
+  //   // Opens WhatsApp
+  //   window.open(whatsappURL, "_blank");
+  // };
+
+  const handleMessageSeller = () => {
+    navigate(`/chat/${info?.id}`, { state: { data: listing } });
   };
 
   const handleCallSeller = () => {
@@ -231,7 +233,11 @@ const Aside = ({ info }: { info: any }) => {
         </div>
 
         <div className="row-flex !flex-wrap gap-x-4 gap-y-2">
-          <Button title={"Message"} className="w-full tracking-wider" />
+          <Button
+            title={"Message"}
+            className="w-full tracking-wider"
+            onClick={handleMessageSeller}
+          />
 
           <div className="w-full relative">
             <Button
@@ -280,8 +286,10 @@ const RequestCallBack = ({ closeModal }: { closeModal: () => void }) => {
       phone_number: values.phone_number,
     };
 
+    console.log(data);
+
     try {
-      toast.success("Saved");
+      toast.success("Callback request sent");
     } catch (error: any) {
       const message = error?.response?.data?.message;
 
@@ -296,7 +304,12 @@ const RequestCallBack = ({ closeModal }: { closeModal: () => void }) => {
         phone_number: "",
       },
       validationSchema: yup.object().shape({
-        name: yup.string().required("name is required"),
+        name: yup
+          .string()
+          .required("Name is required")
+          .test("is-full-name", "Full Name is required", (value: any) => {
+            return value && value.trim().split(" ").length >= 2;
+          }),
         phone_number: yup
           .string()
           .test("is-valid-phone", "Please enter a valid phone number", (value) =>

@@ -9,7 +9,6 @@ import {
   House,
   Instagram,
   Property,
-  RaceCar,
   SpeedMeter,
   Twitter,
   Whatsapp,
@@ -77,22 +76,27 @@ export const faqs = [
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, quos et soluta exercitationem, vitae, veritatis itaque enim iure iusto pariatur dolorem voluptate mollitia laboriosam consequuntur expedita nulla eaque tempora placeat?",
   },
   {
-    label: "How do I contact Support Team",
+    label: 'What happens after I click on "Post ad"?',
     value:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, quos et soluta exercitationem, vitae, veritatis itaque enim iure iusto pariatur dolorem voluptate mollitia laboriosam consequuntur expedita nulla eaque tempora placeat?",
   },
   {
-    label: "How do I contact Support Team",
+    label: "What can I do to sell better?",
     value:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, quos et soluta exercitationem, vitae, veritatis itaque enim iure iusto pariatur dolorem voluptate mollitia laboriosam consequuntur expedita nulla eaque tempora placeat?",
   },
   {
-    label: "How do I contact Support Team",
+    label: "Posting rules",
     value:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, quos et soluta exercitationem, vitae, veritatis itaque enim iure iusto pariatur dolorem voluptate mollitia laboriosam consequuntur expedita nulla eaque tempora placeat?",
   },
   {
-    label: "How do I contact Support Team",
+    label: "Price changes in March 2024",
+    value:
+      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, quos et soluta exercitationem, vitae, veritatis itaque enim iure iusto pariatur dolorem voluptate mollitia laboriosam consequuntur expedita nulla eaque tempora placeat?",
+  },
+  {
+    label: "How to leave feedback about the seller?",
     value:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, quos et soluta exercitationem, vitae, veritatis itaque enim iure iusto pariatur dolorem voluptate mollitia laboriosam consequuntur expedita nulla eaque tempora placeat?",
   },

@@ -1,17 +1,31 @@
 import { profile } from "@/constants/icons";
+import { useAppSelector } from "@/types";
 
 function ChatHeading() {
-  return (
-    <div className="relative z-30 w-full px-3 py-2 border-b border-border-100">
-      <div className="row-flex-start gap-3">
-        <div className="relative size-12 rounded-full overflow-hidden border border-border-100 p-0.5 shadow-sm drop-shadow-md">
-          <img src={profile} alt="" className="size-full object-cover" />
-        </div>
+  const { selectedChat } = useAppSelector((state) => state.chat);
 
-        <h3 className="flex-column flex-1 text-lg leading-4 font-semibold">
-          Henry Dholi
-          <span className="mt-1 text-sm font-medium text-grey">Reply to message</span>
-        </h3>
+  if (!selectedChat) {
+    return (
+      <div className="border-b border-border-100 px-4 py-3">
+        <p className="text-grey">Select a conversation to start messaging</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="border-b border-border-100 px-4 py-3">
+      <div className="row-flex gap-2">
+        <div className="w-8 h-8 rounded-full overflow-hidden">
+          <img
+            src={selectedChat?.property_owner?.profile_picture || profile}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="flex-column flex-1">
+          <h3 className="font-semibold leading-4">{selectedChat?.property_owner?.name}</h3>
+          <p className="text-sm text-grey">{selectedChat?.property_owner?.phone} </p>
+        </div>
       </div>
     </div>
   );

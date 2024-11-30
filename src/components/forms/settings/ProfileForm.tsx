@@ -181,6 +181,7 @@ export const ProfileForm = ({ data, states }: FormProps) => {
 
 export const ContactForm = () => {
   const onSubmit = async (values: any) => {
+    // @ts-ignore
     const data = {
       whatsapp_phone_number: values.whatsapp_phone_number?.startsWith("+234")
         ? `0${values.whatsapp_phone_number.slice(4)}`
@@ -247,6 +248,7 @@ export const ContactForm = () => {
 
 export const EmailForm = () => {
   const onSubmit = async (values: any) => {
+    // @ts-ignore
     const data = {
       email: values.email,
     };

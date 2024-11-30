@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { filterOptions, listings, sortOptions } from "@/constants";
+import { filterOptions, sortOptions } from "@/constants";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -16,6 +16,7 @@ import Collection from "../_sections/Collection";
 import TableGlobalSearch from "@/components/reuseables/TableGlobalSearch";
 
 function Listing() {
+  // @ts-ignore
   const { data, isError, isLoading, error } = useGetMarketItemsQuery({});
   const listings = data?.data?.data;
 
@@ -23,7 +24,7 @@ function Listing() {
   const [filters, setFilters] = useState<FiltersType>({});
   const [searchValue, setSearchValue] = useState("");
   const [filteredData, setFilteredData] = useState<any[]>(listings || []);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [_currentPage, setCurrentPage] = useState<number>(1);
 
   console.log("[MARKET]", data?.data?.data, listings);
 

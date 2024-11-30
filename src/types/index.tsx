@@ -32,6 +32,14 @@ export type User = {
   role: (typeof APP_ROLES)[keyof typeof APP_ROLES];
 };
 
+export type SidebarLinksProp = {
+  icon: any;
+  label: string;
+  href: string;
+  tag?: string;
+  idx?: number;
+};
+
 export type TabsPanelProp = {
   activeTab: number;
   id: string;

@@ -1,4 +1,4 @@
-import { UpdateProfileParams, UpdateProfilePasswordParams } from "@/types/api.types";
+import { UpdateProfilePasswordParams } from "@/types/api.types";
 import api from "../api";
 
 export const profileSlice = api.injectEndpoints({

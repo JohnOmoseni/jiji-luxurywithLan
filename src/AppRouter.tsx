@@ -67,7 +67,7 @@ const AppRouter = () => {
               <Route path="/faqs" element={<FAQS />} />
               <Route path="/reviews" element={<Reviews />} />
               <Route path="/wishlist" element={<WishLists />} />
-              <Route path="/messaging" element={<Messaging />} />
+              <Route path="/chat/:1d" element={<Messaging />} />
               <Route path="/profile" element={<Profile />} />
             </Route>
           </Route>

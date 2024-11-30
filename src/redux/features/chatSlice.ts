@@ -2,11 +2,13 @@ import { ChatProps } from "@/types/api.types";
 import { createSlice } from "@reduxjs/toolkit";
 
 type ChatState = {
-  chatLog: ChatProps[] | [{ loading?: boolean }];
+  chatLog: ChatProps[];
+  selectedChat: any | null;
 };
 
 const initialState: ChatState = {
   chatLog: [],
+  selectedChat: null,
 };
 
 const chatbotSlice = createSlice({
@@ -16,8 +18,11 @@ const chatbotSlice = createSlice({
     setChatLog: (state, { payload }) => {
       state.chatLog = payload;
     },
+    setSelectedChat: (state, { payload }) => {
+      state.selectedChat = payload;
+    },
   },
 });
 
 export default chatbotSlice.reducer;
-export const { setChatLog } = chatbotSlice.actions;
+export const { setChatLog, setSelectedChat } = chatbotSlice.actions;

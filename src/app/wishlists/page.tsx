@@ -1,6 +1,6 @@
 import SectionWrapper from "@/layouts/SectionWrapper";
 import Collection from "../_sections/Collection";
-import { NoSearch, Plus } from "@/constants/icons";
+import { NoSearch } from "@/constants/icons";
 import { listings } from "@/constants";
 
 function WishLists() {

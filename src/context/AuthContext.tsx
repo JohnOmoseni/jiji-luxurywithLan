@@ -48,12 +48,12 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
 
         if (!currentUser.otpVerified) {
           navigate("/verify-otp");
-        } else {
-          navigate("/dashboard");
+        } else if (window.location.pathname === "/verify-otp") {
+          navigate("/");
         }
       } catch (error) {
         const storedUser = sessionStorage.getItem("currentUser");
-        const token = sessionStorage.getItem("token");
+        const token = sessionStorage.getItem("skymeasures-token");
 
         if (storedUser && token) {
           const currentUser = JSON.parse(storedUser);
@@ -79,7 +79,7 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
         email: user.email,
         phone: user.phone,
         image: user.profile_picture,
-        otpVerified: user.is_verified || false,
+        otpVerified: user.email_verified_at || false,
         role: user.role === "super_admin" ? "ADMIN" : "USER",
       };
 
@@ -88,7 +88,7 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
       setRole(currentUser.role);
 
       sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
-      sessionStorage.setItem("token", JSON.stringify(authToken));
+      sessionStorage.setItem("skymeasures-token", JSON.stringify(authToken));
 
       return currentUser;
     },
@@ -180,9 +180,9 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
       sessionStorage.setItem("currentUser", JSON.stringify(updatedUser));
       setUser(updatedUser);
 
-      toast.success("OTP verified successfully. Redirecting to dashboard...");
+      toast.success("OTP verified successfully. Redirecting to Homepage...");
 
-      navigate("/dashboard");
+      navigate("/");
     } catch (error: any) {
       const errorMessage = error?.response?.data?.message;
       toast.error(errorMessage || "Failed to verify OTP. Please try again.");
@@ -255,7 +255,7 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
       setRole(null);
       setIsAuthenticated(false);
       sessionStorage.removeItem("currentUser");
-      sessionStorage.removeItem("token");
+      sessionStorage.removeItem("skymeasures-token");
 
       toast.success("Logged out successfully");
       navigate(routes.LOGIN);
