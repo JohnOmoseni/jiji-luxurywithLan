@@ -1,12 +1,13 @@
 import Button from "@/components/reuseables/CustomButton";
 import Filters from "@/components/reuseables/filters";
 import TableGlobalSearch from "@/components/reuseables/TableGlobalSearch";
-import { categoryFields, locationCategories } from "@/constants";
+import { categoryFields } from "@/constants";
 import { SearchIcon } from "@/constants/icons";
 import { cn } from "@/lib/utils";
 import { useAppSelector, useAppDispatch } from "@/types";
 import { useState, useCallback } from "react";
 import { setFilters } from "@/redux/features/appSlice";
+import { useGetAllStatesQuery } from "@/server/actions/utils";
 
 type Props = {
   containerStyles?: string;
@@ -46,6 +47,7 @@ const FilterSection = () => {
   const [selectedPropertyType, setSelectedPropertyType] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const { selectedCategory } = useAppSelector((state) => state.appState);
+  const { data: states } = useGetAllStatesQuery({});
 
   const selectedTypeDropdown =
     categoryFields[selectedCategory]?.find((field) => field.name.includes("type"))?.options || [];
@@ -88,7 +90,7 @@ const FilterSection = () => {
         />
         <Filters
           placeholder="Location"
-          options={locationCategories}
+          options={states}
           value={selectedLocation}
           setValue={setSelectedLocation}
           containerStyles="flex-1"

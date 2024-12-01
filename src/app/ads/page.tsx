@@ -63,7 +63,7 @@ const EmptyList = () => {
   return (
     <div className="flex-column gap-5 !items-center">
       <NoSearch className="w-fit h-fit" />
-      <h2 className="text-xl">There are no posts yet. Create new one below!</h2>
+      <h2 className="text-xl text-center">There are no posts yet. Create new one below!</h2>
       <Button
         icon={Plus}
         title="Post Ad"

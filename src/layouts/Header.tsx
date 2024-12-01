@@ -72,7 +72,7 @@ function Header({ customHeaderComponentStyles }: { customHeaderComponentStyles?:
           />
 
           <PopoverWrapper
-            containerStyles="rounded-xl border-border-100 min-w-[360px] py-6"
+            containerStyles="rounded-xl border-border-100 min-w-[360px] py-6 max-sm:mr-2"
             trigger={
               <span className="icon-div relative" title="Notification">
                 <Bell className="size-3 sm:size-4" />

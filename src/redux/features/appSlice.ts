@@ -17,7 +17,7 @@ interface AppState {
 }
 
 const initialState: AppState = {
-  selectedCategory: "",
+  selectedCategory: "all",
   filters: {
     type: "",
     location: "",

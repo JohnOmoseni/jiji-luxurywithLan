@@ -67,7 +67,6 @@ const PostAdForm = ({
         amount: data?.amount || "",
         actual_amount: data?.actual_amount || "",
         category: categoryType || "",
-        mediaImage: data?.media || "",
         is_negotiable: data?.is_negotiable || false,
       },
       validationSchema: PostSchema,

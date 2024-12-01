@@ -3,10 +3,9 @@ import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/types";
 import { setChatLog } from "@/redux/features/chatSlice";
 import { AttachFile, Remove, Send } from "@/constants/icons";
-import { useSendMessageInChatMutation, useStartChatMutation } from "@/server/actions/messaging";
+import { useSendMessageInChatMutation } from "@/server/actions/messaging";
 import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
 
 function ChatInput() {
   const { chatLog } = useAppSelector((state) => state.chat);

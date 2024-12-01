@@ -6,14 +6,11 @@ import Conversations from "./Conversations";
 import { useFetchChatMsgsQuery, useGetAllChatsQuery } from "@/server/actions/messaging";
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { useLocation } from "react-router-dom";
 import { ChatSkeletonLoader } from "@/components/fallback/SkeletonLoader";
 import { useAppSelector } from "@/types";
 import { cn } from "@/lib/utils";
 
 export default function Messaging() {
-  const location = useLocation();
-
   const { selectedChat } = useAppSelector((state) => state.chat);
 
   const {
