@@ -1,4 +1,4 @@
-/* @import url("https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Sora:wght@100..800&display=swap");
 
 @font-face {
   font-family: "Sora";
@@ -53,13 +53,13 @@
     @apply bg-background text-foreground;
   }
   h1 {
-    @apply text-primaryFont font-interTight font-bold;
+    @apply text-primaryFont font-sora font-bold;
   }
   h2 {
-    @apply text-secondaryFont !leading-7 font-bold;
+    @apply text-secondaryFont !leading-7 font-sora font-bold;
   }
   h3 {
-    @apply text-subtitle font-semibold;
+    @apply text-subtitle font-sora font-semibold;
   }
 }
 
@@ -108,7 +108,7 @@
     @apply row-flex leading-3 line-clamp-1 w-max cursor-pointer gap-1 rounded-md border border-border bg-background px-2.5 py-2 text-xs font-semibold capitalize transition focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 sm:whitespace-nowrap;
   }
   .icon-div {
-    @apply grid size-7 cursor-pointer place-items-center rounded-full border border-border-100 bg-background-100 p-1 clip-circle;
+    @apply grid size-6 sm:size-7 cursor-pointer place-items-center rounded-full border border-border-100 bg-background-100 p-1 clip-circle;
   }
   .card {
     @apply bg-background p-4 rounded-lg;

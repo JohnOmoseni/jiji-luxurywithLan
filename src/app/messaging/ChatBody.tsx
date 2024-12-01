@@ -8,7 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import Chat from "./Chat";
 
 function ChatBody({ chats }: { chats: any }) {
-  const { chatLog } = useAppSelector((state) => state.chat);
+  const { chatLog, selectedChat } = useAppSelector((state) => state.chat);
   const { user } = useAuth();
 
   const dispatch = useAppDispatch();
@@ -21,7 +21,7 @@ function ChatBody({ chats }: { chats: any }) {
           type: "msg",
           chat_id: chat?.chat_id,
           message: chat?.message,
-          image: chat?.attachments,
+          images: chat?.attachments ? chat?.attachments?.map((i: any) => i?.url) : null,
           incoming: chat?.user_id !== user?.userId,
           outgoing: chat?.user_id === user?.userId,
           timestamp: chat?.updated_at,
@@ -41,8 +41,9 @@ function ChatBody({ chats }: { chats: any }) {
   return (
     <div className="relative flex size-full flex-1 flex-col overflow-hidden bg-background shadow-inner">
       <div className="size-full overflow-y-auto px-3 pb-2 pt-4">
-        {chatLog?.length > 0 &&
-          chatLog?.map((chat, idx) => {
+        {selectedChat &&
+          chatLog?.length > 0 &&
+          chatLog?.map((chat: any, idx: number) => {
             if ("timestamp" in chat) {
               return <Chat key={chat.timestamp} chat={chat} />;
             } else if (!("loading" in chat) || !chat.loading) {

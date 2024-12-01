@@ -28,13 +28,18 @@ export const routes = {
 
 export const mainTabs = [
   {
+    label: "All",
+    value: "all",
+    icon: Car,
+  },
+  {
     label: "Vehicles",
     value: "Automobile",
     icon: Car,
   },
   {
     label: "Houses",
-    value: "Property",
+    value: "House Properties",
     icon: House,
   },
   {
@@ -190,6 +195,14 @@ export const sortOptions = [
   {
     value: "title-ztoa",
     label: "Title: Z to A",
+  },
+  {
+    value: "price-highlow",
+    label: "Price: High to Low",
+  },
+  {
+    value: "price-lowhigh",
+    label: "Price: Low to High",
   },
 ];
 

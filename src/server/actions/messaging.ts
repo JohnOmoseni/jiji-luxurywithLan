@@ -34,19 +34,19 @@ export const messagingSlice = api.injectEndpoints({
     }),
 
     startChat: builder.mutation({
-      query: (message: any) => ({
+      query: (payload: any) => ({
         url: `/chats`,
         method: "POST",
-        body: message,
+        body: payload,
       }),
       invalidatesTags: () => [{ type: "Chat" }] as any,
     }),
 
     sendMessageInChat: builder.mutation({
-      query: ({ chat_id, ...message }: any) => ({
+      query: ({ chat_id, formData }: any) => ({
         url: `/chats/${chat_id}/messages`,
         method: "POST",
-        body: message,
+        body: formData,
       }),
       invalidatesTags: () => [{ type: "Chat" }] as any,
     }),

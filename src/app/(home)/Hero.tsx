@@ -4,8 +4,9 @@ import TableGlobalSearch from "@/components/reuseables/TableGlobalSearch";
 import { categoryFields, locationCategories } from "@/constants";
 import { SearchIcon } from "@/constants/icons";
 import { cn } from "@/lib/utils";
-import { useAppSelector } from "@/types";
-import { useState } from "react";
+import { useAppSelector, useAppDispatch } from "@/types";
+import { useState, useCallback } from "react";
+import { setFilters } from "@/redux/features/appSlice";
 
 type Props = {
   containerStyles?: string;
@@ -39,47 +40,69 @@ const listingTypes = [
 ];
 
 const FilterSection = () => {
-  const [value, setValue] = useState("");
-  const [globalFilter, setGlobalFilter] = useState("");
+  const dispatch = useAppDispatch();
+  const [selectedType, setSelectedType] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedPropertyType, setSelectedPropertyType] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const { selectedCategory } = useAppSelector((state) => state.appState);
 
   const selectedTypeDropdown =
     categoryFields[selectedCategory]?.find((field) => field.name.includes("type"))?.options || [];
 
+  const handleSearch = useCallback(() => {
+    const filters = {
+      type: selectedType,
+      location: selectedLocation,
+      propertyType: selectedPropertyType,
+      searchQuery,
+      category: selectedCategory,
+    };
+
+    dispatch(setFilters(filters));
+  }, [
+    selectedType,
+    selectedLocation,
+    selectedPropertyType,
+    searchQuery,
+    selectedCategory,
+    dispatch,
+  ]);
+
   return (
     <div className="row-flex !flex-wrap gap-x-3 gap-y-4 card !p-2">
       <TableGlobalSearch
         hideIcon
-        globalValue={globalFilter || ""}
+        globalValue={searchQuery}
         containerStyles="max-[480px]:w-full"
-        onChange={(value: string) => setGlobalFilter(value)}
+        onChange={(value: string) => setSearchQuery(value)}
       />
 
       <div className="row-flex !flex-wrap gap-3">
         <Filters
           placeholder="For rent"
           options={listingTypes}
-          value={value}
-          setValue={setValue}
+          value={selectedType}
+          setValue={setSelectedType}
           containerStyles="flex-1"
         />
         <Filters
           placeholder="Location"
           options={locationCategories}
-          value={value}
-          setValue={setValue}
+          value={selectedLocation}
+          setValue={setSelectedLocation}
           containerStyles="flex-1"
         />
         <Filters
           placeholder={`${selectedCategory} type`}
           options={selectedTypeDropdown}
-          value={value}
-          setValue={setValue}
+          value={selectedPropertyType}
+          setValue={setSelectedPropertyType}
           containerStyles="flex-1"
         />
       </div>
 
-      <Button dir="right" icon={SearchIcon} title="Search" onClick={() => null} />
+      <Button dir="right" icon={SearchIcon} title="Search" onClick={handleSearch} />
     </div>
   );
 };

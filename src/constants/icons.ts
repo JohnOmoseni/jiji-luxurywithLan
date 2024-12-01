@@ -5,7 +5,9 @@ import {
   IoEyeOutline as Eye,
   IoAlertCircleOutline as Alert,
   IoSend as Send,
+  IoChatbox as Chatbox,
 } from "react-icons/io5";
+import { FaClipboardList as Adverts, FaTags as WishListIcon } from "react-icons/fa";
 import { FcGoogle as Google } from "react-icons/fc";
 import { BiDotsVertical as VerticalDots } from "react-icons/bi";
 
@@ -68,7 +70,7 @@ export { default as SpeedMeter } from "../assets/svgs/speed.svg?react";
 import car_image from "/images/car-image.jpeg";
 import car_front from "/images/car-front.png";
 import house_image from "/images/house-image.jpeg";
-import profile from "/images/profile.png";
+import profile from "/images/fallback_image.png";
 import logo from "/images/logo.png";
 import property_image from "/images/property_image.png";
 
@@ -86,12 +88,15 @@ export {
   KeyboardArrowRight,
   KeyboardArrowDown,
   AttachFile,
+  Chatbox,
   FileDownload,
   FilterIcon,
   Send,
   Plus,
   ThreeDots,
   SearchIcon,
+  Adverts,
+  WishListIcon,
   Check,
   Remove,
   Google,

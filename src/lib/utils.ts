@@ -10,6 +10,21 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const formatPrice = (price: string | number) => {
+  if (!price) return 0;
+  return new Intl.NumberFormat("en-NG", {
+    maximumFractionDigits: 0,
+  }).format(Number(price));
+};
+
+export const convertToTitleCase = (str: string) => {
+  if (!str) return "";
+  return str
+    ?.split("_")
+    ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    ?.join(" ");
+};
+
 export const formatRelativeTime = (date: any) => {
   if (!date) {
     return "Unknown";

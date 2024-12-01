@@ -9,10 +9,10 @@ import { toast } from "sonner";
 import { useLocation } from "react-router-dom";
 import { ChatSkeletonLoader } from "@/components/fallback/SkeletonLoader";
 import { useAppSelector } from "@/types";
+import { cn } from "@/lib/utils";
 
 export default function Messaging() {
   const location = useLocation();
-  const listing = location.state?.data;
 
   const { selectedChat } = useAppSelector((state) => state.chat);
 
@@ -32,13 +32,11 @@ export default function Messaging() {
     { chat_id: selectedChat?.id },
     {
       skip: !selectedChat,
-      // Add error handling options
-      refetchOnMountOrArgChange: true,
     }
   );
 
-  const chatList = chatListData?.data?.data;
-  const chats = chatMsgs?.data?.data;
+  const chatList = chatListData?.data?.data || [];
+  const chats = chatMsgs?.data?.data || [];
 
   useEffect(() => {
     if (isError) {
@@ -48,13 +46,13 @@ export default function Messaging() {
   }, [isError, error]);
 
   if (process.env.NODE_ENV === "development") {
-    console.log("[USER CHATS]", chatList, selectedChat, chats);
+    console.log("[USER CHATS]", chatList, chats);
   }
 
   if (isError) {
     return (
       <SectionWrapper mainContainerStyles="!px-2 !py-3">
-        <div className="flex items-center justify-center h-[60vh]">
+        <div className="flex items-center justify-center h-[80vh]">
           <p>Failed to load messages. Please try again later.</p>
         </div>
       </SectionWrapper>
@@ -63,12 +61,26 @@ export default function Messaging() {
 
   return (
     <SectionWrapper mainContainerStyles="!px-2 !py-3">
-      <div className="flex-column sm:flex-row h-dvh w-full max-w-4xl mx-auto border border-border-100 rounded-md">
-        <aside className="w-full sm:w-64 md:w-[400px]  sm:border-r border-border-100">
-          <Conversations userChats={chatList} isLoading={fetchingConversations} listing={listing} />
+      <div className="flex-column sm:flex-row h-dvh w-full max-w-4xl mx-auto border border-border-100 rounded-md relative overflow-hidden">
+        <aside
+          className={cn(
+            "w-full sm:w-64 md:w-[400px] sm:border-r border-border-100",
+            "absolute sm:relative inset-0",
+            "transition-transform duration-300 ease-in-out",
+            selectedChat ? "-translate-x-full sm:translate-x-0" : "translate-x-0"
+          )}
+        >
+          <Conversations userChats={chatList} isLoading={fetchingConversations} />
         </aside>
 
-        <div className="flex-column min-w-[320px] size-full overflow-hidden">
+        <div
+          className={cn(
+            "flex-column min-w-[320px] size-full overflow-hidden",
+            "absolute sm:relative inset-0",
+            "transition-transform duration-300 ease-in-out",
+            selectedChat ? "translate-x-0" : "translate-x-full sm:translate-x-0"
+          )}
+        >
           {isFetchingChatMsgs ? (
             <ChatSkeletonLoader />
           ) : (

@@ -95,7 +95,10 @@ export type ChatProps = {
   chat_id?: string;
   type: "msg" | "error";
   message?: string;
+  images?: string[];
   incoming?: boolean | string;
   outgoing?: boolean | string;
   timestamp?: number;
+  error?: boolean;
+  loading?: boolean;
 };

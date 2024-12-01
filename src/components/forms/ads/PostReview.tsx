@@ -20,9 +20,9 @@ export default function ReviewForm() {
   const onSubmit = async (values: any, actions: any) => {
     try {
       const data = {
-        property_id: id || 5,
+        property_id: id,
         comment: values.comment,
-        rating: values.rating,
+        rating: ratings,
       };
 
       await addReviewMutation(data).unwrap();

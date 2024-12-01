@@ -14,10 +14,10 @@ import { toast } from "sonner";
 import SectionWrapper from "@/layouts/SectionWrapper";
 import Collection from "../_sections/Collection";
 import TableGlobalSearch from "@/components/reuseables/TableGlobalSearch";
+import FallbackLoader from "@/components/fallback/FallbackLoader";
 
 function Listing() {
-  // @ts-ignore
-  const { data, isError, isLoading, error } = useGetMarketItemsQuery({});
+  const { data, isError, isFetching, error } = useGetMarketItemsQuery({});
   const listings = data?.data?.data;
 
   const [sort, setSort] = useState("title-atoz");
@@ -25,8 +25,6 @@ function Listing() {
   const [searchValue, setSearchValue] = useState("");
   const [filteredData, setFilteredData] = useState<any[]>(listings || []);
   const [_currentPage, setCurrentPage] = useState<number>(1);
-
-  console.log("[MARKET]", data?.data?.data, listings);
 
   useEffect(() => {
     if (isError) {
@@ -41,7 +39,7 @@ function Listing() {
   }, []);
 
   useEffect(() => {
-    if (listings && listings.length > 0) {
+    if (listings && listings?.length > 0) {
       let filtered = [...listings];
 
       if (searchValue.trim()) {
@@ -66,9 +64,9 @@ function Listing() {
       } else if (sort === "title-ztoa") {
         filtered?.sort((a, b) => b.name?.localeCompare(a.name));
       } else if (sort === "price-lowhigh") {
-        filtered.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+        filtered.sort((a, b) => parseFloat(a?.actual_amount) - parseFloat(b?.actual_amount));
       } else if (sort === "price-highlow") {
-        filtered.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+        filtered.sort((a, b) => parseFloat(b?.actual_amount) - parseFloat(a?.actual_amount));
       }
 
       setFilteredData(filtered);
@@ -82,10 +80,12 @@ function Listing() {
     };
   }, []);
 
+  console.log("[MARKET]", listings, filteredData);
+
   return (
     <SectionWrapper
       customHeaderComponentStyles={
-        <div className="flex-1 row-flex relative md:left-[10%]">
+        <div className="flex-1 row-flex relative">
           <TableGlobalSearch
             globalValue={searchValue}
             onChange={(value) => setSearchValue(value)}
@@ -115,11 +115,18 @@ function Listing() {
             />
           </div>
 
-          <Collection
-            data={filteredData}
-            emptyTitle="No Listing found"
-            emptyContainerStyles="h-[75vh]"
-          />
+          {isFetching ? (
+            <div className="relative h-[50vh] max-h-[300px]">
+              <FallbackLoader loading={isFetching} />
+            </div>
+          ) : (
+            <Collection
+              data={filteredData}
+              emptyTitle="No Listings found"
+              emptySubText="No listings found matching your search criteria."
+              emptyContainerStyles="h-[30vh] md:h-[75vh]"
+            />
+          )}
         </section>
       </div>
     </SectionWrapper>

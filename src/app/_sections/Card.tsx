@@ -1,7 +1,7 @@
 import ConfirmDelete from "@/components/reuseables/ConfirmDelete";
 import { StatusBadge } from "@/components/reuseables/StatusBadge";
-import { car_image, Heart, Location } from "@/constants/icons";
-import { cn } from "@/lib/utils";
+import { Heart, Location } from "@/constants/icons";
+import { cn, formatPrice } from "@/lib/utils";
 import { toggleWishlistItem } from "@/redux/features/wishlistSlice";
 import { useDeleteListingMutation } from "@/server/actions/listing";
 import { useLazyGetFavoriteQuery } from "@/server/actions/wishlist";
@@ -16,7 +16,7 @@ type CardProps = {
 };
 
 function Card({ item, isOwnListing, isWishlist }: CardProps) {
-  const [triggerToggleFavorite] = useLazyGetFavoriteQuery();
+  const [triggerToggleFavorite, { isLoading: isTogglingFavorite }] = useLazyGetFavoriteQuery();
   const [deleteUserListingMutation, { isLoading: isDeleting }] = useDeleteListingMutation();
 
   const dispatch = useAppDispatch();
@@ -25,18 +25,19 @@ function Card({ item, isOwnListing, isWishlist }: CardProps) {
 
   const isFavorited = wishlist.includes(item.id);
 
-  const handleWishlistClick = async () => {
-    const action = isFavorited ? "remove" : "add";
+  const handleWishlistClick = async (actionType?: "add" | "remove") => {
+    const action = actionType || (isFavorited ? "remove" : "add");
 
     try {
+      dispatch(toggleWishlistItem(item.id));
       const res = await triggerToggleFavorite({ listing_id: item.id, action }).unwrap();
 
-      dispatch(toggleWishlistItem(item.id));
       toast.success(
         res?.message || `Property ${action === "add" ? "added" : "removed"} successfully`
       );
     } catch (error: any) {
       console.error("Error updating wishlist:", error);
+      dispatch(toggleWishlistItem(item.id));
 
       toast.error(
         error?.data?.message || `Error ${action === "add" ? "adding to" : "removing from"} wishlist`
@@ -61,7 +62,11 @@ function Card({ item, isOwnListing, isWishlist }: CardProps) {
   };
 
   return isWishlist ? (
-    <WishListCard item={item} />
+    <WishListCard
+      item={item}
+      handleDeleteListing={handleWishlistClick}
+      isDeleting={isTogglingFavorite}
+    />
   ) : (
     <li className="flex-column group relative w-full overflow-hidden transition-sm max-sm:min-w-[300px] md:max-w-[380px] min-h-[320px] rounded-xl">
       <Link
@@ -87,7 +92,7 @@ function Card({ item, isOwnListing, isWishlist }: CardProps) {
             <h3 className="line-clamp-2 leading-6 text-lg tracking-wide">{item?.name}</h3>
           </Link>
 
-          <div className="icon-div !size-8" onClick={handleWishlistClick}>
+          <div className="icon-div !size-8" onClick={() => handleWishlistClick()}>
             <Heart className={`size-4 ${isFavorited ? "fill-red-500 stroke-red-500" : ""}`} />
           </div>
         </div>
@@ -112,7 +117,7 @@ function Card({ item, isOwnListing, isWishlist }: CardProps) {
         <div className={cn("mt-3", isOwnListing && "row-flex-btwn gap-4")}>
           <p className="text-secondary font-semibold ml-1 leading-3">
             {/* &#8358; */}
-            {item?.currency} {item?.actual_amount}.00
+            {item?.currency} {formatPrice(item?.actual_amount)}
           </p>
 
           {isOwnListing && (
@@ -140,12 +145,20 @@ function Card({ item, isOwnListing, isWishlist }: CardProps) {
 
 export default Card;
 
-const WishListCard = ({ item }: { item: any }) => {
+const WishListCard = ({
+  item,
+  isDeleting,
+  handleDeleteListing,
+}: {
+  item: any;
+  isDeleting: boolean;
+  handleDeleteListing: (actionType?: "add" | "remove") => void;
+}) => {
   return (
     <li className="group grid grid-cols-[45%_1fr] relative w-full overflow-hidden transition-sm max-sm:min-w-[300px]  rounded-xl border border-border-100 shadow-sm ">
       <div
         className="flex min-h-[200px] w-full flex-grow flex-shrink-0 bg-cover bg-no-repeat bg-center overflow-hidden"
-        style={{ backgroundImage: `url(${car_image})` }}
+        style={{ backgroundImage: `url(${item?.main_thumbnail})` }}
       />
 
       {item?.main_category_name && (
@@ -160,17 +173,28 @@ const WishListCard = ({ item }: { item: any }) => {
       )}
 
       <div className="flex-column w-full gap-1 px-3.5 py-4">
-        <h3 className="line-clamp-2 leading-6 text-lg tracking-wide">{item?.title}</h3>
+        <h3 className="line-clamp-2 leading-6 text-lg tracking-wide">{item?.name}</h3>
 
-        <p className="row-flex-start gap-1 mt-1">
+        <p className="flex flex-row gap-1 mt-1">
           <Location className="size-5" />
-          <span className="font-light text-sm">Lagos, Ikeja</span>
+          <span className="font-light text-sm">
+            {item?.state_name}
+            {item?.lga_name ? `, ${item?.lga_name}` : item?.district && `, ${item?.district}`}
+          </span>
         </p>
 
         <div className={cn("mt-auto row-flex-btwn !flex-wrap gap-x-3 gap-y-1.5")}>
-          <p className="text-secondary font-semibold">&#8358;120,000,000</p>
+          <p className="text-secondary font-semibold">
+            {item?.currency} {formatPrice(item?.actual_amount)}
+          </p>
 
-          <p className="font-semibold ml-auto text-end text-base text-red-600">Delete</p>
+          <ConfirmDelete
+            onDeleteClick={() => handleDeleteListing("remove")}
+            title="remove this ad from wishlist"
+            actionTitle="Remove Ad"
+            isPending={isDeleting}
+            trigger={<p className="font-semibold text-xs text-red-600 cursor-pointer">Remove</p>}
+          />
         </div>
       </div>
     </li>

@@ -1,24 +1,45 @@
-import { CategoryTypes } from "@/types/api.types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-type StateProp = {
+interface FilterState {
+  searchQuery: string;
+  type: string;
+  location: string;
+  propertyType: string;
+  category: string;
+}
+
+interface AppState {
+  selectedCategory: string;
+  filters: FilterState;
   openMenu: boolean;
   screenSize: number;
   isNetwork: boolean;
-  selectedCategory: CategoryTypes;
-};
+}
 
-const initialAppState: StateProp = {
+const initialState: AppState = {
+  selectedCategory: "",
+  filters: {
+    type: "",
+    location: "",
+    propertyType: "",
+    searchQuery: "",
+    category: "",
+  },
   openMenu: false,
   screenSize: 0,
   isNetwork: true,
-  selectedCategory: "Automobile",
 };
 
-const appSlice = createSlice({
+export const appSlice = createSlice({
   name: "app",
-  initialState: initialAppState,
+  initialState,
   reducers: {
+    setFilters: (state, action: PayloadAction<FilterState>) => {
+      state.filters = action.payload;
+    },
+    clearFilters: (state) => {
+      state.filters = initialState.filters;
+    },
     setOpenMenu: (state, action: PayloadAction<boolean>) => {
       state.openMenu = action.payload;
     },
@@ -35,4 +56,11 @@ const appSlice = createSlice({
 });
 
 export default appSlice.reducer;
-export const { setScreenSize, setOpenMenu, setSelectedCategory, setNetwork } = appSlice.actions;
+export const {
+  setFilters,
+  clearFilters,
+  setOpenMenu,
+  setScreenSize,
+  setSelectedCategory,
+  setNetwork,
+} = appSlice.actions;

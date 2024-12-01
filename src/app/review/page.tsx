@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { useGetAllReviewsQuery } from "@/server/actions/reviews";
-import { NoSearch, ReviewStar } from "@/constants/icons";
+import { NoSearch, profile, ReviewStar } from "@/constants/icons";
 import SectionWrapper from "@/layouts/SectionWrapper";
 import ReviewForm from "@/components/forms/ads/PostReview";
 import FallbackLoader from "@/components/fallback/FallbackLoader";
@@ -30,7 +30,7 @@ export default Reviews;
 
 const Aside = ({}: {}) => {
   const { id } = useParams();
-  const { data, isLoading, isError, error } = useGetAllReviewsQuery({ property_id: id || 5 });
+  const { data, isLoading, isError, error } = useGetAllReviewsQuery({ property_id: id });
   const reviews: any[] = data?.data?.data;
   const totalRating = data?.data?.totalRating || 1;
 
@@ -95,7 +95,11 @@ const Aside = ({}: {}) => {
                 >
                   <div className="w-full grid grid-cols-[max-content_1fr] items-center gap-3 sm:max-h-[80px]">
                     <div className="relative size-10 overflow-hidden rounded-full border border-slate-300 border-opacity-30 p-px shadow-sm clip-circle self-start">
-                      <img src={review?.image || ""} alt="" className="object-contain size-full" />
+                      <img
+                        src={review?.image || profile}
+                        alt=""
+                        className="object-contain size-full"
+                      />
                     </div>
 
                     <div>

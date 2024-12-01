@@ -62,7 +62,7 @@ const config = {
       },
       fontFamily: {
         inter: ["Inter", "Arial", "sans-serif"],
-        interTight: ["Inter Tight", "Arial", "sans-serif"],
+        sora: ["Sora", "Arial", "sans-serif"],
       },
       fontSize: {
         sm: "0.8rem",

@@ -1,4 +1,14 @@
-import { ArrowRight, Bell, KeyboardArrowDown, Logo, LogoutIcon, Plus } from "@/constants/icons";
+import {
+  Adverts,
+  ArrowRight,
+  Bell,
+  Chatbox,
+  KeyboardArrowDown,
+  Logo,
+  LogoutIcon,
+  Plus,
+  WishListIcon,
+} from "@/constants/icons";
 import { PopoverWrapper } from "@/components/ui/components/PopoverWrapper";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
@@ -10,6 +20,7 @@ import { cn } from "@/lib/utils";
 
 import AvatarWrapper from "@/components/ui/components/AvatarWrapper";
 import Button from "@/components/reuseables/CustomButton";
+import TooltipWrapper from "@/components/ui/components/TooltipWrapper";
 
 function Header({ customHeaderComponentStyles }: { customHeaderComponentStyles?: any }) {
   const { handleLogout, isLoadingAuth, user } = useAuth();
@@ -24,7 +35,7 @@ function Header({ customHeaderComponentStyles }: { customHeaderComponentStyles?:
   };
 
   return (
-    <div className="sticky top-0 bg-background shadow-sm z-[50] min-h-[60px] w-full">
+    <div className="sticky top-0 bg-background shadow-sm z-[100] min-h-[60px] w-full">
       <div className="row-flex-btwn gap-6 py-3 px-4 sm:px-5">
         <Link to="/">
           <Logo className="w-fit h-10" />
@@ -32,14 +43,41 @@ function Header({ customHeaderComponentStyles }: { customHeaderComponentStyles?:
 
         {customHeaderComponentStyles && customHeaderComponentStyles}
 
-        <div className="row-flex ml-auto gap-3">
+        <div className="row-flex ml-auto max-[340px]:gap-2 gap-3">
+          <TooltipWrapper
+            trigger={
+              <Link to="/wishlist" className="icon-div">
+                <WishListIcon className="size-3 sm:size-4" />
+              </Link>
+            }
+            content="Saved"
+          />
+
+          <TooltipWrapper
+            trigger={
+              <Link to="/chats" className="icon-div">
+                <Chatbox className="size-3 sm:size-4" />
+              </Link>
+            }
+            content="Messages"
+          />
+
+          <TooltipWrapper
+            trigger={
+              <Link to="/my-ads" className="icon-div">
+                <Adverts className="size-3 sm:size-4" />
+              </Link>
+            }
+            content="My Adverts"
+          />
+
           <PopoverWrapper
             containerStyles="rounded-xl border-border-100 min-w-[360px] py-6"
             trigger={
-              <span className="icon-div !bg-background-100 relative" title="Notification">
-                <Bell className="size-4" />
+              <span className="icon-div relative" title="Notification">
+                <Bell className="size-3 sm:size-4" />
 
-                <span className="absolute size-1.5 bg-red-500 rounded-full right-[0.42rem] top-[0.25rem]"></span>
+                <span className="absolute size-1.5 bg-red-500 rounded-full top-[0.2rem] right-[0.3rem] sm:right-[0.42rem] sm:top-[0.25rem]"></span>
               </span>
             }
           >

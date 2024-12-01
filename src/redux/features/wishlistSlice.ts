@@ -2,10 +2,12 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 type WishListProps = {
   items: any[];
+  hasMutated: boolean;
 };
 
 const initialState: WishListProps = {
   items: [],
+  hasMutated: false,
 };
 
 const wishlistSlice = createSlice({
@@ -15,6 +17,9 @@ const wishlistSlice = createSlice({
     setWishlist: (state, action) => {
       state.items = action.payload;
     },
+    setHasMutated: (state, action) => {
+      state.hasMutated = action.payload;
+    },
     toggleWishlistItem: (state, action: PayloadAction<string>) => {
       const propertyId = action.payload;
 
@@ -23,10 +28,11 @@ const wishlistSlice = createSlice({
       } else {
         state.items.push(propertyId);
       }
+      state.hasMutated = !state.hasMutated;
     },
   },
 });
 
-export const { setWishlist, toggleWishlistItem } = wishlistSlice.actions;
+export const { setWishlist, toggleWishlistItem, setHasMutated } = wishlistSlice.actions;
 
 export default wishlistSlice.reducer;

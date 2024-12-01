@@ -3,8 +3,10 @@ import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/types";
 import { setChatLog } from "@/redux/features/chatSlice";
 import { AttachFile, Remove, Send } from "@/constants/icons";
-import { useSendMessageInChatMutation } from "@/server/actions/messaging";
+import { useSendMessageInChatMutation, useStartChatMutation } from "@/server/actions/messaging";
 import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 function ChatInput() {
   const { chatLog } = useAppSelector((state) => state.chat);
@@ -15,6 +17,7 @@ function ChatInput() {
   const [preview, setPreview] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
+  const { selectedChat } = useAppSelector((state) => state.chat);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null!);
 
@@ -62,72 +65,60 @@ function ChatInput() {
       message: msg,
       outgoing: "true",
       images: preview,
+      timestamp: Date.now(),
     };
 
-    console.log("TEST", chat, chatLog);
-
-    const chatLogNew = [...chatLog, { ...chat, timestamp: Date.now() }];
-    dispatch(setChatLog([...chatLogNew, { loading: true }]));
+    dispatch(setChatLog([...chatLog, { ...chat, loading: true }]));
 
     setText("");
     setPreview([]);
     setFiles([]);
 
-    return;
-
     // make http call
+    const formData = new FormData();
     const payload = {
-      chat_id: "",
-      message: msg,
+      chat_id: selectedChat?.id,
+      formData,
     };
 
+    formData.append("message", msg);
+    // Append files as an array using the same key name
+    if (files.length > 0) {
+      formData.append("attachments[]", files[0]); // First file
+      for (let i = 1; i < files.length; i++) {
+        formData.append("attachments[]", files[i]); // Subsequent files
+      }
+    }
+
     try {
-      const res = await sendMessageMutation(payload).unwrap();
+      await sendMessageMutation(payload).unwrap();
 
-      console.log("CHAT RESPONSE", res);
+      // Create new array without loading field from the last message
+      const updatedChatLog = chatLog.map((msg: any, index: number) => {
+        if (index === chatLog.length - 1) {
+          // Remove loading field from the last message
+          const { loading, ...messageWithoutLoading } = msg;
+          return messageWithoutLoading;
+        }
+        return msg;
+      });
 
-      const response = {
-        type: "msg",
-        message: res?.message,
-        incoming: "true",
-        timestamp: Date.now(),
-      };
+      dispatch(setChatLog([...updatedChatLog]));
+    } catch (error: any) {
+      const errorMsg = error?.response?.data?.message;
 
-      dispatch(
-        setChatLog(
-          chatLogNew.filter((obj) => {
-            if ("loading" in obj && obj.loading) {
-              // return false
-              return !obj?.loading;
-            }
-            return true;
-          })
-        )
-      );
-      dispatch(setChatLog([...chatLogNew, response]));
-    } catch (error) {
       const responseError = {
         type: "error",
-        incoming: "true",
+        outgoing: "true",
         timestamp: Date.now(),
         error: true,
       };
 
-      console.log(`Error: ${error}`);
+      console.log(`Error:`, error);
+      toast.error(errorMsg || "Error sending message");
 
-      const errorArray = [...chatLogNew, responseError];
+      const errorArray = [...chatLog, responseError];
 
-      dispatch(
-        setChatLog(
-          chatLogNew.filter((obj) => {
-            if ("loading" in obj && obj.loading) {
-              // return false
-              return !obj?.loading;
-            }
-            return true;
-          })
-        )
-      );
       dispatch(setChatLog(errorArray));
     }
   };
@@ -226,5 +217,39 @@ const Preview = ({ preview, handleRemoveFile }: { preview: string[]; handleRemov
         </div>
       )}
     </>
+  );
+};
+
+export const StartChatInput = ({
+  text,
+  setText,
+}: {
+  text: string;
+  setText: React.Dispatch<React.SetStateAction<string>>;
+}) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null!);
+
+  useEffect(() => {
+    textareaRef.current && textareaRef.current.focus();
+  }, [textareaRef.current]);
+
+  const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value);
+  };
+
+  return (
+    <div className="w-full row-flex sm:min-h-[3rem]">
+      <div className="row-flex size-full bg-slate-100 rounded-md py-2.5 px-3">
+        <Textarea
+          typeof="text"
+          ref={textareaRef}
+          value={text}
+          disabled={false}
+          onChange={handleInputChange}
+          placeholder="Type a Message..."
+          className="remove-scrollbar i-reset p-0 min-h-0 flex-1 resize-none leading-4 !whitespace-pre-wrap shadow-none border-none placeholder:text-base"
+        />
+      </div>
+    </div>
   );
 };
