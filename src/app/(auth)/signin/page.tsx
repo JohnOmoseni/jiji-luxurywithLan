@@ -31,7 +31,10 @@ function SignIn() {
       <div className="flex-column gap-0.5">
         <h2 className="text-2xl md:text-3xl">Welcome back!</h2>
         <p className="sm:whitespace-nowrap leading-5 tracking-wide mt-0.5 text-foreground-100">
-          Welcome, let’s sign you in to your account
+          Don't have an account?{" "}
+          <Link to="/signup" className="text-secondary font-semibold hover:underline transition">
+            Sign up
+          </Link>
         </p>
       </div>
 
