@@ -36,7 +36,7 @@ jobs:
         key: ${{ secrets.EC2_PRIVATE_KEY }}  # SSH private key as a secret
         
         # Source files to copy
-        source: dist/œ
+        source: dist/
         
         # Destination path on the EC2 instance
         target: /var/www/html/
