@@ -1,4 +1,4 @@
-name: Deploy Dynamic Platform to Staging
+name: Luxury WithLan Staging Deployment
 
 on:
   push:
