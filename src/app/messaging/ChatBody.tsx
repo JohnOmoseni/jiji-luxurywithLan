@@ -39,7 +39,7 @@ function ChatBody({ chats }: { chats: any }) {
   }, [chatLog]);
 
   return (
-    <div className="relative flex size-full flex-1 flex-col overflow-hidden bg-background shadow-inner">
+    <div className="relative min-h-[60dvh] flex size-full flex-1 flex-col overflow-hidden bg-background shadow-inner">
       <div className="size-full overflow-y-auto px-3 pb-2 pt-4">
         {selectedChat &&
           chatLog?.length > 0 &&

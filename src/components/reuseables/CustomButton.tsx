@@ -13,7 +13,7 @@ const buttonVariants = cva(
         outline: "border-border-100 text-foreground hover:bg-slate-100",
       },
       size: {
-        default: "sm:h-10 px-4",
+        default: "max-h-10 px-4",
         sm: "px-3",
         lg: "md:py-4 2xl:h-12",
       },

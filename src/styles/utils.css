@@ -9,6 +9,10 @@
 [data-radix-popper-content-wrapper]:has(.header-popover-content) {
   top: 1rem !important;
 }
+.select-trigger > span:first-of-type {
+  width: 100%;
+}
+
 /* Remove scrollbar */
 /* Universal selector to hide scrollbar */
 .remove-scrollbar {

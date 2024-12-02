@@ -1,13 +1,13 @@
-import CustomFormField, { FormFieldType } from "@/components/forms/CustomFormField";
 import { Envelope, Lock } from "@/constants/icons";
 import { cn } from "@/lib/utils";
 import { SignInSchema } from "@/schema/validation";
 import { useFormik } from "formik";
 import { InferType } from "yup";
 import { useAuth } from "@/context/AuthContext";
-import Button from "@/components/reuseables/CustomButton";
 import { Link } from "react-router-dom";
+import Button from "@/components/reuseables/CustomButton";
 import GoogleAuth from "../_sections/GoogleAuth";
+import CustomFormField, { FormFieldType } from "@/components/forms/CustomFormField";
 
 function SignIn() {
   const { handleLogin, isLoadingAuth } = useAuth();

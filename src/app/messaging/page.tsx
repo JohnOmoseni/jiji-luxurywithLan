@@ -58,7 +58,7 @@ export default function Messaging() {
 
   return (
     <SectionWrapper mainContainerStyles="!px-2 !py-3">
-      <div className="flex-column sm:flex-row h-dvh w-full max-w-4xl mx-auto border border-border-100 rounded-md relative overflow-hidden">
+      <div className="flex-column sm:flex-row h-[83dvh] w-full max-w-4xl mx-auto border border-border-100 rounded-md relative overflow-x-hidden overflow-y-auto remove-scrollbar">
         <aside
           className={cn(
             "w-full sm:w-64 md:w-[400px] sm:border-r border-border-100",
@@ -75,7 +75,7 @@ export default function Messaging() {
             "flex-column min-w-[320px] size-full overflow-hidden",
             "absolute sm:relative inset-0",
             "transition-transform duration-300 ease-in-out",
-            selectedChat ? "translate-x-0" : "translate-x-full sm:translate-x-0"
+            selectedChat ? "translate-x-0" : "translate-x-[150%] sm:translate-x-0"
           )}
         >
           {isFetchingChatMsgs ? (

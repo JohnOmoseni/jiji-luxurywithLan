@@ -131,7 +131,7 @@
   }
 
   .shad-select-trigger {
-    @apply h-auto min-w-[80px] gap-2 border border-border-100 font-semibold text-placeholder w-full rounded-lg py-2.5 pl-3 pr-2 bg-inherit text-sm focus:ring-0 focus:ring-transparent md:whitespace-nowrap cursor-pointer leading-4 active:bg-background-200 transition;
+    @apply h-auto min-w-[80px]  gap-2 border border-border-100 font-semibold text-placeholder w-full rounded-lg py-2.5 pl-3 pr-2 bg-inherit text-sm focus:ring-0 focus:ring-transparent md:whitespace-nowrap cursor-pointer leading-4 active:bg-background-200 transition;
   }
   .shad-select-content {
     @apply relative rounded-lg bg-background !important;
@@ -143,5 +143,11 @@
   /* SKELETON LOADER */
   .skeleton {
     @apply bg-background-skeleton rounded-sm w-[110px] h-5 animate-pulse;
+  }
+
+  .scroll-to-top {
+    @apply scroll-smooth;
+    scroll-behavior: smooth;
+    scroll-to-top: auto;
   }
 }

@@ -30,8 +30,8 @@ import Messaging from "./app/messaging/page";
 const AppRouter = () => {
   return (
     <>
-      <ScrollToTop />
       <ErrorBoundary>
+        <ScrollToTop />
         <Routes>
           <Route element={<LayoutProvider />}>
             <Route path="*" element={<NotFound />} />

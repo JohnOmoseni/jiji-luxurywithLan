@@ -38,7 +38,10 @@ const SelectDropdown = ({
       defaultValue={defaultValue?.value}
     >
       <SelectTrigger
-        className={cn("shad-select-trigger justify-between capitalize", triggerStyles)}
+        className={cn(
+          "shad-select-trigger justify-between capitalize select-trigger",
+          triggerStyles
+        )}
       >
         {trigger ? trigger : <SelectValue placeholder={placeholder || "Select"} />}
       </SelectTrigger>

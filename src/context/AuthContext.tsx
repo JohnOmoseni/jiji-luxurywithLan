@@ -118,7 +118,7 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
       }
     } catch (error: any) {
       // null - request made and it failed
-      const errorMessage = error?.response?.data?.message;
+      const errorMessage = error?.response?.data?.message || error?.message;
       let message = "Error signing in";
 
       if (errorMessage?.includes("These credentials do not match our records")) {
