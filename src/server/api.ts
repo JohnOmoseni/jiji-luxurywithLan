@@ -6,7 +6,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl: API_DOMAIN || "",
   // @ts-ignore
   prepareHeaders: (headers, { getState }) => {
-    const token = JSON.parse(sessionStorage.getItem("skymeasures-token") || "");
+    const token = JSON.parse(sessionStorage.getItem("skymeasures-token") || '""');
 
     token && headers.set("Authorization", `Bearer ${token}`);
 

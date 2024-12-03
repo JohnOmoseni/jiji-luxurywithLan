@@ -1,5 +1,5 @@
 import { locations, socials } from "@/constants";
-import { ArrowRight } from "@/constants/icons";
+import { ArrowRight, FooterImage } from "@/constants/icons";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
 
@@ -8,8 +8,13 @@ const Footer = () => {
   const isChatPage = pathname.includes("messaging");
   return (
     <footer
-      className={cn("mt-auto bg-secondary text-secondary-foreground", isChatPage && "hidden")}
+      className={cn(
+        "bg-secondary text-secondary-foreground relative max-[480px]:mt-8 mt-20 md:mt-40 lg:mt-56",
+        isChatPage && "hidden"
+      )}
     >
+      <FooterImage className="absolute bottom-[97%] min-[400px]:bottom-[98%] left-0 right-0 min-h-[100px] max-h-[180px]  w-full h-fit" />
+
       <div className="md:row-flex-btwn mt-8 flex-column gap-12 px-4 py-6 sm:pt-[5%] md:gap-6 md:px-[4%] !items-start">
         <div className="flex-column w-4/5">
           <Link to="/" className="group relative">

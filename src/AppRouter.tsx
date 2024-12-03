@@ -51,22 +51,17 @@ const AppRouter = () => {
               <Route path="/change-password/success" element={<SuccessPage />} />
             </Route>
 
-            <Route
-              element={
-                <ProtectedRoute>
-                  <DashboardLayout />
-                </ProtectedRoute>
-              }
-            >
+            <Route element={<DashboardLayout />}>
               <Route path="/" element={<Home />} />
               <Route path="/listings" element={<Listing />} />
               <Route path="/listings/:id" element={<Details />} />
+              <Route path="/faqs" element={<FAQS />} />
+              <Route path="/reviews/:id" element={<Reviews />} />
+
               <Route path="/my-ads" element={<Ads />} />
               <Route path="/ads/post" element={<PostAds />} />
               <Route path="/ads/edit-advert/:id" element={<PostAds />} />
               <Route path="/wishlist" element={<WishLists />} />
-              <Route path="/faqs" element={<FAQS />} />
-              <Route path="/reviews/:id" element={<Reviews />} />
               <Route path="/chats" element={<Messaging />} />
               <Route path="/chat/:1d" element={<Messaging />} />
               <Route path="/profile" element={<Profile />} />

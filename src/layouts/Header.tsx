@@ -7,6 +7,7 @@ import {
   Logo,
   LogoutIcon,
   Plus,
+  profile,
   WishListIcon,
 } from "@/constants/icons";
 import { PopoverWrapper } from "@/components/ui/components/PopoverWrapper";
@@ -22,7 +23,11 @@ import AvatarWrapper from "@/components/ui/components/AvatarWrapper";
 import Button from "@/components/reuseables/CustomButton";
 import TooltipWrapper from "@/components/ui/components/TooltipWrapper";
 
-function Header({ customHeaderComponentStyles }: { customHeaderComponentStyles?: any }) {
+interface HeaderProps {
+  customHeaderComponentStyles?: React.ReactNode;
+}
+
+function Header({ customHeaderComponentStyles }: HeaderProps) {
   const { handleLogout, isLoadingAuth, user } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -34,94 +39,118 @@ function Header({ customHeaderComponentStyles }: { customHeaderComponentStyles?:
     await handleLogout();
   };
 
+  console.log("[USER]", user);
+
   return (
     <div className="sticky top-0 bg-background shadow-sm z-[100] min-h-[60px] w-full">
       <div className="row-flex-btwn gap-6 py-3 px-4 sm:px-5">
-        <Link to="/">
+        <Link to="/" className="md:ml-4">
           <Logo className="w-fit h-10" />
         </Link>
 
         {customHeaderComponentStyles && customHeaderComponentStyles}
 
         <div className="row-flex ml-auto max-[340px]:gap-2 gap-3">
-          <TooltipWrapper
-            trigger={
-              <Link to="/wishlist" className="icon-div">
-                <WishListIcon className="size-3 sm:size-4" />
-              </Link>
-            }
-            content="Saved"
-          />
+          {!user ? (
+            <Link
+              to="/signin"
+              className="text-base text-secondary font-semibold transition hover:scale-105"
+            >
+              Login
+            </Link>
+          ) : (
+            <>
+              <TooltipWrapper
+                trigger={
+                  <Link to="/wishlist" className="icon-div">
+                    <WishListIcon className="size-3 sm:size-4" />
+                  </Link>
+                }
+                content="Saved"
+              />
 
-          <TooltipWrapper
-            trigger={
-              <Link to="/chats" className="icon-div">
-                <Chatbox className="size-3 sm:size-4" />
-              </Link>
-            }
-            content="Messages"
-          />
+              <TooltipWrapper
+                trigger={
+                  <Link to="/chats" className="icon-div">
+                    <Chatbox className="size-3 sm:size-4" />
+                  </Link>
+                }
+                content="Messages"
+              />
 
-          <TooltipWrapper
-            trigger={
-              <Link to="/my-ads" className="icon-div">
-                <Adverts className="size-3 sm:size-4" />
-              </Link>
-            }
-            content="My Adverts"
-          />
+              <TooltipWrapper
+                trigger={
+                  <Link to="/my-ads" className="icon-div">
+                    <Adverts className="size-3 sm:size-4" />
+                  </Link>
+                }
+                content="My Adverts"
+              />
 
-          <PopoverWrapper
-            containerStyles="rounded-xl border-border-100 min-w-[360px] py-6 max-sm:mr-2"
-            trigger={
-              <span className="icon-div relative" title="Notification">
-                <Bell className="size-3 sm:size-4" />
+              <PopoverWrapper
+                containerStyles="rounded-xl border-border-100 min-w-[360px] py-6 max-sm:mr-2"
+                trigger={
+                  <span className="icon-div relative" title="Notification">
+                    <Bell className="size-3 sm:size-4" />
 
-                <span className="absolute size-1.5 bg-red-500 rounded-full top-[0.2rem] right-[0.3rem] sm:right-[0.42rem] sm:top-[0.25rem]"></span>
-              </span>
-            }
-          >
-            <Notification />
-          </PopoverWrapper>
+                    <span className="absolute size-1.5 bg-red-500 rounded-full top-[0.2rem] right-[0.3rem] sm:right-[0.42rem] sm:top-[0.25rem]"></span>
+                  </span>
+                }
+              >
+                <Notification />
+              </PopoverWrapper>
+            </>
+          )}
 
           <div className="sm:row-flex gap-2 hidden">
-            <Link to="/profile" className="">
-              <AvatarWrapper
-                containerClassName="max-sm:order-2"
-                fallback={getInitials(user?.name)}
+            {user ? (
+              <Link to="/profile" className="">
+                <AvatarWrapper
+                  containerClassName="max-sm:order-2"
+                  fallback={getInitials(user?.name)}
+                />
+              </Link>
+            ) : (
+              <img
+                src={profile}
+                alt="user"
+                className="size-8 rounded-full object-cover clip-circle"
               />
-            </Link>
+            )}
 
-            <DropdownList
-              trigger={
-                <div className="row-flex-btwn gap-1">
-                  <p className="w-full break-words text-sm max-w-[10ch] text-center font-semibold leading-4">
-                    {user?.name || "User"}
-                  </p>
+            {user && (
+              <DropdownList
+                trigger={
+                  <div className="row-flex-btwn gap-1">
+                    <p className="w-full break-words text-sm max-w-[10ch] text-center font-semibold leading-4">
+                      {user?.name || "User"}
+                    </p>
 
-                  <KeyboardArrowDown className="size-4 cursor-pointer" />
-                </div>
-              }
-              containerStyles="min-w-[6rem] header-popover-content"
-              list={["Log out"]}
-              renderItem={(item, idx) => {
-                return (
-                  <div
-                    key={idx}
-                    className="row-flex-btwn py-2.5 px-3 w-full cursor-pointer gap-3"
-                    onClick={onLogout}
-                  >
-                    <span className="text-base">{isLoadingAuth ? "Signing out" : item}</span>
-
-                    {isLoadingAuth ? (
-                      <BtnLoader isLoading={isLoadingAuth} />
-                    ) : (
-                      <LogoutIcon className="h-fit w-4 text-red-600" />
-                    )}
+                    <KeyboardArrowDown className="size-4 cursor-pointer" />
                   </div>
-                );
-              }}
-            />
+                }
+                containerStyles="min-w-[6rem] header-popover-content"
+                list={["Profile", "Log out"]}
+                renderItem={(item, idx) => {
+                  return (
+                    <div
+                      key={idx}
+                      className="row-flex-btwn py-2.5 px-3 w-full cursor-pointer gap-3"
+                      onClick={item === "Log out" ? onLogout : () => navigate("/profile")}
+                    >
+                      <span className="text-base">
+                        {isLoadingAuth && item === "Log out" ? "Signing out" : item}
+                      </span>
+                      {isLoadingAuth && item === "Log out" ? (
+                        <BtnLoader isLoading={isLoadingAuth} />
+                      ) : item === "Log out" ? (
+                        <LogoutIcon className="h-fit w-4 text-red-600" />
+                      ) : null}
+                    </div>
+                  );
+                }}
+              />
+            )}
           </div>
 
           <Button
@@ -129,7 +158,9 @@ function Header({ customHeaderComponentStyles }: { customHeaderComponentStyles?:
             title="Post"
             className={cn("group-hover:scale-95", isPostPage && "!hidden")}
             onClick={() =>
-              !isPostPage ? navigate("/ads/post", { state: { category: selectedCategory } }) : null
+              user
+                ? navigate("/ads/post", { state: { category: selectedCategory } })
+                : navigate("/signin")
             }
           />
         </div>

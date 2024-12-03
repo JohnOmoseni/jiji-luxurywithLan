@@ -8,6 +8,7 @@ import {
   Gear,
   House,
   Instagram,
+  List,
   Property,
   SpeedMeter,
   Twitter,
@@ -30,7 +31,7 @@ export const mainTabs = [
   {
     label: "All",
     value: "all",
-    icon: Car,
+    icon: List,
   },
   {
     label: "Vehicles",

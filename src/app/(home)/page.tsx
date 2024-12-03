@@ -10,11 +10,9 @@ function Home() {
   const { data, isError, isLoading, error } = useGetMarketItemsQuery({});
   const markets = data?.data?.data;
 
-  console.log("[MARKET]", markets);
-
   useEffect(() => {
     if (isError) {
-      const message = (error as any)?.message;
+      const message = (error as any)?.message || (error as any)?.data?.message;
       toast.error(message || "Error fetching data");
     }
   }, [isError]);

@@ -7,10 +7,11 @@
   left: -3.5rem !important;
 }
 [data-radix-popper-content-wrapper]:has(.header-popover-content) {
-  top: 1rem !important;
+  top: 0.8rem !important;
 }
 .select-trigger > span:first-of-type {
-  width: 100%;
+  width: 100% !important;
+  text-align: left;
 }
 
 /* Remove scrollbar */

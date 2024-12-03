@@ -129,6 +129,13 @@ function SignUp() {
         </form>
 
         <GoogleAuth />
+
+        <p className="leading-4 text-xs text-center mt-3 tracking-wide text-foreground-100">
+          By continuing you agree to the{" "}
+          <Link to="/policy" className="text-secondary font-semibold">
+            Policy and Rules
+          </Link>
+        </p>
       </div>
     </>
   );

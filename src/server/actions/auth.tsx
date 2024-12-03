@@ -16,6 +16,17 @@ const login = async (params: {
   }
 };
 
+const loginWithGoogle = async (): Promise<AxiosResponse["data"]> => {
+  try {
+    const response = await axiosBaseUrl.get("/login-with-google");
+    console.log("LOGIN WITH GOOGLE RESPONSE", response);
+
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
 const register = async (params: {
   name: string;
   email: string;
@@ -118,4 +129,5 @@ export const authApi = {
   resendOtp,
   forgotPassword,
   resetPassword,
+  loginWithGoogle,
 };

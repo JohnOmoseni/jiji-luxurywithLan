@@ -17,6 +17,9 @@ import { useFormik } from "formik";
 import { Value } from "react-phone-number-input";
 import { cn, convertToTitleCase, formatPrice, formatRelativeTime } from "@/lib/utils";
 import { isValidPhoneNumber } from "libphonenumber-js";
+import { StartChatInput } from "../messaging/ChatInput";
+import { useStartChatMutation } from "@/server/actions/messaging";
+import { useAuth } from "@/context/AuthContext";
 
 import Button from "@/components/reuseables/CustomButton";
 import SectionWrapper from "@/layouts/SectionWrapper";
@@ -24,8 +27,6 @@ import Collection from "../_sections/Collection";
 import FallbackLoader from "@/components/fallback/FallbackLoader";
 import FormWrapper from "@/components/forms/FormWrapper";
 import CustomFormField, { FormFieldType } from "@/components/forms/CustomFormField";
-import { StartChatInput } from "../messaging/ChatInput";
-import { useStartChatMutation } from "@/server/actions/messaging";
 
 function Details() {
   const { id } = useParams();
@@ -242,6 +243,8 @@ const Aside = ({ info }: { info: any; listing?: any }) => {
   const [showRequestCallback, setShowRequestCallback] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   // const handleShowContact = () => {
   //   const phoneNumber = "08103011365";
@@ -316,9 +319,19 @@ const Aside = ({ info }: { info: any; listing?: any }) => {
             <StartChat info={info} closeChat={() => setShowChat(false)} />
           ) : (
             <Button
-              title="Message"
+              title={user ? "Message" : "Login to Message"}
               className="w-full tracking-wider"
-              onClick={() => setShowChat(true)}
+              onClick={() => {
+                if (user) {
+                  setShowChat(true);
+                } else {
+                  //  const returnTo = encodeURIComponent(window.location.pathname);
+                  //  navigate(`/signin?returnTo=${returnTo}`);
+                  navigate("/signin", {
+                    state: { returnTo: window.location.pathname },
+                  });
+                }
+              }}
             />
           )}
 

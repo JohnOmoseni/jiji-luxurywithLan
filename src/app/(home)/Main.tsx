@@ -70,7 +70,7 @@ function Main({ data }: { data: any[] }) {
             </Link>
           </div>
 
-          {filteredData.length > 0 ? (
+          {filteredData && filteredData?.length > 0 ? (
             <Collection
               data={filteredData}
               containerStyles="sm:grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))]"

@@ -58,25 +58,18 @@ export default function Messaging() {
 
   return (
     <SectionWrapper mainContainerStyles="!px-2 !py-3">
-      <div className="flex-column sm:flex-row h-[83dvh] w-full max-w-4xl mx-auto border border-border-100 rounded-md relative overflow-x-hidden overflow-y-auto remove-scrollbar">
+      <div className="grid grid-cols-1 sm:grid-cols-[auto,1fr] h-[83dvh] sm:h-full w-full max-w-5xl mx-auto border border-border-100 rounded-md overflow-x-hidden overflow-y-auto remove-scrollbar">
         <aside
           className={cn(
-            "w-full sm:w-64 md:w-[400px] sm:border-r border-border-100",
-            "absolute sm:relative inset-0",
-            "transition-transform duration-300 ease-in-out",
-            selectedChat ? "-translate-x-full sm:translate-x-0" : "translate-x-0"
+            "w-full h-full sm:w-64 md:w-[360px] sm:border-r border-border-100 bg-background",
+            selectedChat ? "hidden sm:block" : "block"
           )}
         >
           <Conversations userChats={chatList} isLoading={fetchingConversations} />
         </aside>
 
         <div
-          className={cn(
-            "flex-column min-w-[320px] size-full overflow-hidden",
-            "absolute sm:relative inset-0",
-            "transition-transform duration-300 ease-in-out",
-            selectedChat ? "translate-x-0" : "translate-x-[150%] sm:translate-x-0"
-          )}
+          className={cn("w-full h-full bg-background", selectedChat ? "block" : "hidden sm:block")}
         >
           {isFetchingChatMsgs ? (
             <ChatSkeletonLoader />

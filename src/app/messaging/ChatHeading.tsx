@@ -15,7 +15,7 @@ function ChatHeading() {
   }
 
   return (
-    <div className="border-b border-border-100 px-4 py-3">
+    <div className="border-b border-border-100 px-3 sm:px-3.5 py-3">
       <div className="row-flex gap-1">
         <ArrowBack className="icon size-4" onClick={() => dispatch(setSelectedChat(null))} />
 

@@ -7,18 +7,21 @@ import { NavigateFunction } from "react-router-dom";
 import { Alert } from "@/constants/icons";
 import { useCallback } from "react";
 import { RegisterUserParams } from "@/types/api.types";
+import { API_DOMAIN } from "@/server/axios";
 
 type AuthContextType = {
   user?: User | null;
   token?: string | null;
   role?: (typeof APP_ROLES)[keyof typeof APP_ROLES] | string | null;
-  handleLogin: (email: string, password: string) => Promise<void>;
+  handleLogin: (email: string, password: string, returnTo?: string) => Promise<void>;
   handleRegister: (data: RegisterUserParams) => Promise<void>;
   handleVerifyOtp: (otp: number, email: string) => Promise<void>;
   handleResendOtp: (email: string) => Promise<void>;
   handleForgotPassword: (email: string) => Promise<void>;
   handleResetPassword: (email: string, password: string, otp: string) => Promise<void>;
   handleLogout: () => Promise<void>;
+  handleGoogleLogin: () => void;
+  fetchUser: () => Promise<void>;
   isAuthenticated?: boolean;
   isLoadingAuth?: boolean;
 };
@@ -36,38 +39,41 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
   const [isLoadingAuth, setIsLoadingAuth] = useState(false);
   const [role, setRole] = useState<(typeof APP_ROLES)[keyof typeof APP_ROLES] | string | null>();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await authApi.getAuthUser();
+  const fetchUser = async () => {
+    try {
+      const res = await authApi.getAuthUser();
 
-        if (!res?.status) throw new Error(res?.message || "Error getting authenticated user");
+      if (!res?.status) throw new Error(res?.message || "Error getting authenticated user");
 
-        const { user, token: authToken } = res.data;
-        const currentUser = setUserSession(user, authToken);
+      const { user, token: authToken } = res.data;
+      const currentUser = setUserSession(user, authToken);
 
-        if (!currentUser.otpVerified) {
-          navigate("/verify-otp");
-        } else if (window.location.pathname === "/verify-otp") {
-          navigate("/");
-        }
-      } catch (error) {
-        const storedUser = sessionStorage.getItem("currentUser");
-        const token = sessionStorage.getItem("skymeasures-token");
-
-        if (storedUser && token) {
-          const currentUser = JSON.parse(storedUser);
-          setToken(JSON.parse(token));
-          setUser(currentUser);
-          setRole(currentUser.role);
-        } else {
-          setToken(null);
-          setUser(null);
-          setRole(null);
-        }
+      if (!currentUser.otpVerified && !window.location.search.includes("sso")) {
+        navigate("/verify-otp");
+      } else if (window.location.pathname === "/verify-otp") {
+        navigate("/");
       }
-    };
+    } catch (error) {
+      const storedUser = sessionStorage.getItem("currentUser");
+      const token = sessionStorage.getItem("skymeasures-token");
 
+      if (storedUser && token) {
+        const currentUser = JSON.parse(storedUser || "{}");
+        setToken(JSON.parse(token || '"'));
+        setUser(currentUser);
+        setIsAuthenticated(true);
+        setRole(currentUser.role);
+      } else {
+        setToken(null);
+        setUser(null);
+        setRole(null);
+        setIsAuthenticated(false);
+        toast.error("Failed to fetch authenticated user.");
+      }
+    }
+  };
+
+  useEffect(() => {
     fetchUser();
   }, []);
 
@@ -86,6 +92,7 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
       setToken(authToken);
       setUser(currentUser);
       setRole(currentUser.role);
+      setIsAuthenticated(true);
 
       sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
       sessionStorage.setItem("skymeasures-token", JSON.stringify(authToken));
@@ -95,7 +102,7 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
     [setToken, setUser, setRole]
   );
 
-  const handleLogin = async (email: string, password: string) => {
+  const handleLogin = async (email: string, password: string, returnTo?: string) => {
     if (!email || !password) return;
     setIsLoadingAuth(true);
 
@@ -113,8 +120,7 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
         toast.success(res?.message || "Login successful. Please verify OTP.");
       } else {
         toast.success(res?.message || "Login successful.");
-
-        navigate("/");
+        returnTo && navigate(returnTo || "/", { replace: true });
       }
     } catch (error: any) {
       // null - request made and it failed
@@ -140,6 +146,16 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
       );
     } finally {
       setIsLoadingAuth(false);
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    try {
+      // Redirect the user to the Google login endpoint
+      window.location.href = `${API_DOMAIN}/login-with-google`;
+    } catch (error: any) {
+      const errorMessage = error?.message || error?.response?.data?.message;
+      toast.error(errorMessage || "Something went wrong. Please try again.");
     }
   };
 
@@ -286,6 +302,8 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
         handleForgotPassword,
         handleResetPassword,
         handleRegister,
+        handleGoogleLogin,
+        fetchUser,
       }}
       {...props}
     >

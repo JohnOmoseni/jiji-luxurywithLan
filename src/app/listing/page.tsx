@@ -85,7 +85,7 @@ function Listing() {
   return (
     <SectionWrapper
       customHeaderComponentStyles={
-        <div className="flex-1 row-flex relative">
+        <div className="flex-1 hidden md:row-flex relative">
           <TableGlobalSearch
             globalValue={searchValue}
             onChange={(value) => setSearchValue(value)}
@@ -107,9 +107,9 @@ function Listing() {
               list={sortOptions}
               handleChange={(value) => setSort(value)}
               trigger={
-                <Button variant="outline" size="sm" className="row-flex gap-1.5 p-4">
-                  <ArrowUpDownIcon className="size-4" />
-                  <span className="text-base font-semibold mt-1">Sort By</span>
+                <Button variant="outline" size="sm" className="row-flex gap-1.5 p-3">
+                  <ArrowUpDownIcon className="size-3" />
+                  <span className="text-base font-medium mt-1">Sort By</span>
                 </Button>
               }
             />
@@ -123,7 +123,9 @@ function Listing() {
             <Collection
               data={filteredData}
               emptyTitle="No Listings found"
-              emptySubText="No listings found matching your search criteria."
+              emptySubText={
+                searchValue ? `No listings found matching your search criteria.` : "Post an advert"
+              }
               emptyContainerStyles="h-[30vh] md:h-[75vh]"
             />
           )}

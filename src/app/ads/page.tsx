@@ -1,17 +1,15 @@
 import { toast } from "sonner";
 import { NoSearch, Plus } from "@/constants/icons";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useGetAllListingsQuery } from "@/server/actions/listing";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/reuseables/CustomButton";
 import SectionWrapper from "@/layouts/SectionWrapper";
 import Collection from "../_sections/Collection";
-import TableGlobalSearch from "@/components/reuseables/TableGlobalSearch";
 import FallbackLoader from "@/components/fallback/FallbackLoader";
 
 function Ads() {
   const { data, isError, isLoading, error } = useGetAllListingsQuery({});
-  const [searchValue, setSearchValue] = useState("");
   const listings = data?.data?.data;
 
   console.log("[MY ADS]", listings);
@@ -24,16 +22,7 @@ function Ads() {
   }, [isError]);
 
   return (
-    <SectionWrapper
-      customHeaderComponentStyles={
-        <div className="flex-1 row-flex relative md:left-[10%]">
-          <TableGlobalSearch
-            globalValue={searchValue}
-            onChange={(value) => setSearchValue(value)}
-          />
-        </div>
-      }
-    >
+    <SectionWrapper>
       <div className="card !p-6 max-w-6xl mx-auto">
         {isLoading ? (
           <div className="relative h-[50vh] max-h-[300px]">

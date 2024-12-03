@@ -30,6 +30,7 @@ import {
   PiDotsThreeOutlineFill as ThreeDots,
   PiChatTeardropLight as Chat,
   PiImage as AttachFile,
+  PiListPlusFill as List,
 } from "react-icons/pi";
 import { BiSearchAlt as SearchIcon } from "react-icons/bi";
 import { HiOutlineEnvelope as Envelope, HiOutlineTrash as Trash } from "react-icons/hi2";
@@ -66,6 +67,7 @@ export { default as RaceCar } from "../assets/svgs/race-car.svg?react";
 export { default as CarUsed } from "../assets/svgs/car-used.svg?react";
 export { default as Gear } from "../assets/svgs/gear.svg?react";
 export { default as SpeedMeter } from "../assets/svgs/speed.svg?react";
+export { default as FooterImage } from "../assets/svgs/footer-image.svg?react";
 
 import car_image from "/images/car-image.jpeg";
 import car_front from "/images/car-front.png";
@@ -90,6 +92,7 @@ export {
   AttachFile,
   Chatbox,
   FileDownload,
+  List,
   FilterIcon,
   Send,
   Plus,

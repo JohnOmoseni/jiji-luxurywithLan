@@ -17,7 +17,7 @@ function AvatarWrapper({ src, fallback, containerClassName }: AvatarProps) {
       )}
     >
       <AvatarImage src={src || ""} />
-      <AvatarFallback>{fallback ?? "UN"}</AvatarFallback>
+      <AvatarFallback className="font-semibold">{fallback ?? "UN"}</AvatarFallback>
     </Avatar>
   );
 }

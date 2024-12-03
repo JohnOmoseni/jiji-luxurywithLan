@@ -1,20 +1,58 @@
+import { toast } from "sonner";
+import { useEffect, useState } from "react";
 import { Envelope, Lock } from "@/constants/icons";
 import { cn } from "@/lib/utils";
 import { SignInSchema } from "@/schema/validation";
 import { useFormik } from "formik";
 import { InferType } from "yup";
 import { useAuth } from "@/context/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Button from "@/components/reuseables/CustomButton";
 import GoogleAuth from "../_sections/GoogleAuth";
 import CustomFormField, { FormFieldType } from "@/components/forms/CustomFormField";
 
 function SignIn() {
-  const { handleLogin, isLoadingAuth } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { handleLogin, isLoadingAuth, fetchUser } = useAuth();
+  const [searchParams] = useSearchParams();
+  const [hasLoggedInWithGoogle, setHasLoggedInWithGoogle] = useState(false);
 
   const onSubmit = async (values: InferType<typeof SignInSchema>) => {
-    await handleLogin(values?.email, values?.password);
+    const returnTo = location.state?.returnTo || "/";
+    await handleLogin(values?.email, values?.password, returnTo);
   };
+
+  useEffect(() => {
+    const ssoStatus = searchParams.get("sso-signin-status");
+    const ssoToken = searchParams.get("token");
+
+    const handleSSOAuth = async () => {
+      if (ssoStatus === "success" && ssoToken) {
+        try {
+          sessionStorage.setItem("skymeasures-token", JSON.stringify(ssoToken));
+          setHasLoggedInWithGoogle(true);
+          await fetchUser();
+
+          // Clear the URL parameters after successful authentication
+          // const returnTo = searchParams.get("returnTo") || "/";
+          const returnTo = location.state?.returnTo || "/";
+          navigate(returnTo, { replace: true });
+          toast.success("SSO login successful!");
+        } catch (error) {
+          toast.error("Authentication failed! Please try again.");
+          sessionStorage.removeItem("skymeasures-token");
+        }
+      } else if (ssoStatus === "failed") {
+        toast.error("SSO login failed! Please try again.");
+        setHasLoggedInWithGoogle(false);
+      }
+    };
+
+    if (ssoStatus) {
+      handleSSOAuth();
+    }
+  }, [searchParams]);
 
   const { values, errors, touched, isSubmitting, handleBlur, handleChange, handleSubmit } =
     useFormik({
@@ -76,11 +114,12 @@ function SignIn() {
               inputStyles="h-10"
             />
           </div>
+
           <Button
             type="submit"
             title={isSubmitting ? "Signing in..." : "Login"}
             className={cn("!mt-auto !w-full !py-5")}
-            disabled={isLoadingAuth}
+            disabled={isLoadingAuth || hasLoggedInWithGoogle}
             isLoading={isLoadingAuth}
           />
         </form>
@@ -93,6 +132,13 @@ function SignIn() {
         </p>
 
         <GoogleAuth />
+
+        <p className="leading-4 text-xs text-center mt-3 tracking-wide text-foreground-100">
+          By continuing you agree to the{" "}
+          <Link to="/policy" className="text-secondary font-semibold">
+            Policy and Rules
+          </Link>
+        </p>
       </div>
     </>
   );
