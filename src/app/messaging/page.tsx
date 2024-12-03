@@ -57,11 +57,11 @@ export default function Messaging() {
   }
 
   return (
-    <SectionWrapper mainContainerStyles="!px-2 !py-3">
-      <div className="grid grid-cols-1 sm:grid-cols-[auto,1fr] h-[83dvh] sm:h-full w-full max-w-5xl mx-auto border border-border-100 rounded-md overflow-x-hidden overflow-y-auto remove-scrollbar">
+    <SectionWrapper mainContainerStyles="!px-2 !py-3 h-[88vh] overflow-hidden">
+      <div className="h-full grid grid-cols-1 sm:grid-cols-[auto,_1fr] sm:!items-start w-full max-w-5xl mx-auto border border-border-100 rounded-md overflow-x-hidden overflow-y-auto remove-scrollbar">
         <aside
           className={cn(
-            "w-full h-full sm:w-64 md:w-[360px] sm:border-r border-border-100 bg-background",
+            "size-full flex sm:w-64 md:w-[360px] bg-background overflow-x-hidden overflow-y-auto remove-scrollbar sm:border-r border-border-100",
             selectedChat ? "hidden sm:block" : "block"
           )}
         >
@@ -69,7 +69,10 @@ export default function Messaging() {
         </aside>
 
         <div
-          className={cn("w-full h-full bg-background", selectedChat ? "block" : "hidden sm:block")}
+          className={cn(
+            "size-full bg-background overflow-hidden flex-col",
+            selectedChat ? "flex" : "hidden sm:flex"
+          )}
         >
           {isFetchingChatMsgs ? (
             <ChatSkeletonLoader />

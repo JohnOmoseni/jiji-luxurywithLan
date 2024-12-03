@@ -30,7 +30,7 @@ import CustomFormField, { FormFieldType } from "@/components/forms/CustomFormFie
 
 function Details() {
   const { id } = useParams();
-  const { data, isError, isLoading, error } = useGetItemByIDQuery({ id: id! }, { skip: !id });
+  const { data, isError, isFetching, error } = useGetItemByIDQuery({ id: id! }, { skip: !id });
 
   const item = data?.data;
   const [showMore, setShowMore] = useState(false);
@@ -109,9 +109,9 @@ function Details() {
   return (
     <SectionWrapper>
       <div className="">
-        {isLoading ? (
+        {isFetching ? (
           <div className="relative h-[50vh] max-h-[300px]">
-            <FallbackLoader loading={isLoading} />
+            <FallbackLoader loading={isFetching} />
           </div>
         ) : (
           <div className="flex-column md:row-flex !items-start gap-6 md:gap-8">

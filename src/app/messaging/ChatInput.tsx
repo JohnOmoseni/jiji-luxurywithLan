@@ -8,7 +8,7 @@ import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef, useState } fr
 import { toast } from "sonner";
 
 function ChatInput() {
-  const { chatLog } = useAppSelector((state) => state.chat);
+  const { chatLog, selectedChat } = useAppSelector((state) => state.chat);
   const [text, setText] = useState("");
   const [sendMessageMutation] = useSendMessageInChatMutation();
   // @ts-ignore
@@ -16,7 +16,6 @@ function ChatInput() {
   const [preview, setPreview] = useState<string[]>([]);
 
   const dispatch = useAppDispatch();
-  const { selectedChat } = useAppSelector((state) => state.chat);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null!);
 
@@ -155,7 +154,7 @@ function ChatInput() {
   return (
     <div
       className={cn(
-        "flex-column gap-3 w-full py-2.5 pl-3 pr-4 border-t border-border-100 sm:min-h-[3rem]"
+        "flex-column gap-3 mt-auto w-full py-2.5 pl-3 pr-4 border-t border-border-100 "
       )}
     >
       <Preview preview={preview} handleRemoveFile={handleRemoveFile} />
@@ -166,7 +165,7 @@ function ChatInput() {
             typeof="text"
             ref={textareaRef}
             value={text}
-            disabled={false}
+            disabled={!selectedChat}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             placeholder="Message..."
@@ -181,7 +180,12 @@ function ChatInput() {
             </label>
           </div>
         </div>
-        <button type="submit" title="Send" className="icon">
+        <button
+          type="submit"
+          title="Send"
+          disabled={!selectedChat}
+          className="icon disabled:cursor-not-allowed"
+        >
           <Send size={25} className="text-secondary" />
         </button>
       </form>
@@ -194,7 +198,7 @@ const Preview = ({ preview, handleRemoveFile }: { preview: string[]; handleRemov
   return (
     <>
       {preview.length > 0 && (
-        <div className="overflow-y-hidden">
+        <div className="overflow-hidden">
           <div className="grid grid-flow-col w-full grid-cols-[repeat(auto-fit,_minmax(4rem,_5rem))]  gap-x-4">
             {preview.map((fileUrl, index) => (
               <div key={index} className="relative w-20 h-16">

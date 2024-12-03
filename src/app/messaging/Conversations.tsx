@@ -68,7 +68,11 @@ const ChatRow = ({ chat }: { chat: any }) => {
 
         <h3 className="line-clamp-2 max-sm:pr-2.5 font-semibold">{user?.listingTitle} </h3>
 
-        {user?.lastMessage && <p className="text-xs truncate mt-1">{user?.lastMessage}</p>}
+        {user?.lastMessage && (
+          <p className="text-xs [text-wrap:auto] w-full mt-1 line-clamp-3 break-all">
+            {user?.lastMessage}
+          </p>
+        )}
       </div>
     </li>
   );
