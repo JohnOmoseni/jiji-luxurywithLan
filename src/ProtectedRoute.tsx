@@ -1,19 +1,20 @@
 import { PropsWithChildren, useLayoutEffect } from "react";
 import { useAuth } from "./context/AuthContext";
 import { routes } from "./constants";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import FallbackLoader from "./components/fallback/FallbackLoader";
 
 function ProtectedRoute({ children }: PropsWithChildren) {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   console.log("[Current user]", user);
 
   useLayoutEffect(() => {
     if (user === null) {
       // Redirect to login page
-      navigate(routes.LOGIN, { replace: true });
+      navigate(routes.LOGIN, { replace: true, state: { returnTo: location.pathname } });
       return;
     }
 

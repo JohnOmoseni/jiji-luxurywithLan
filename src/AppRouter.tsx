@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Outlet } from "react-router-dom";
 import SignIn from "./app/(auth)/signin/page";
 import SignUp from "./app/(auth)/signup/page";
 import VerifyOTP from "./app/(auth)/verify/page";
@@ -58,13 +58,21 @@ const AppRouter = () => {
               <Route path="/faqs" element={<FAQS />} />
               <Route path="/reviews/:id" element={<Reviews />} />
 
-              <Route path="/my-ads" element={<Ads />} />
-              <Route path="/ads/post" element={<PostAds />} />
-              <Route path="/ads/edit-advert/:id" element={<PostAds />} />
-              <Route path="/wishlist" element={<WishLists />} />
-              <Route path="/chats" element={<Messaging />} />
-              <Route path="/chat/:1d" element={<Messaging />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route
+                element={
+                  <ProtectedRoute>
+                    <Outlet />
+                  </ProtectedRoute>
+                }
+              >
+                <Route path="/my-ads" element={<Ads />} />
+                <Route path="/ads/post" element={<PostAds />} />
+                <Route path="/ads/edit-advert/:id" element={<PostAds />} />
+                <Route path="/wishlist" element={<WishLists />} />
+                <Route path="/chats" element={<Messaging />} />
+                <Route path="/chat/:id" element={<Messaging />} />
+                <Route path="/profile" element={<Profile />} />
+              </Route>
             </Route>
           </Route>
         </Routes>

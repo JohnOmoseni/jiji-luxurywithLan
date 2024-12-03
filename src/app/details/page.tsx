@@ -121,8 +121,11 @@ function Details() {
                   <img
                     src={details?.mediaImages?.[activeImageIndex]}
                     alt=""
-                    className="w-full h-full object-cover rounded-t-md transition-opacity duration-300"
+                    className="w-full h-full object-cover rounded-t-md transition-opacity duration-300 nodownload-image"
                     style={{ opacity: 0.9 }}
+                    onContextMenu={(e) => e.preventDefault()}
+                    draggable="false"
+                    loading="lazy"
                   />
 
                   <div className="absolute inset-0 row-flex pointer-events-none">
@@ -150,7 +153,16 @@ function Details() {
                       <img
                         src={img}
                         alt={`Image ${index + 1}`}
-                        className="w-full h-full object-cover rounded-md"
+                        onContextMenu={(e) => e.preventDefault()}
+                        draggable="false"
+                        loading="lazy"
+                        className="w-full h-full object-cover rounded-md nodownload-image"
+                      />
+
+                      {/* Invisible overlay for thumbnails */}
+                      <div
+                        className="absolute inset-0 bg-transparent select-none"
+                        onContextMenu={(e) => e.preventDefault()}
                       />
                     </div>
                   ))}
