@@ -9,7 +9,7 @@ import {
   Verified,
   WishListIcon,
 } from "@/constants/icons";
-import { useGetItemByIDQuery } from "@/server/actions/market";
+import { useGetItemByIDQuery, useRequestCallbackMutation } from "@/server/actions/market";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -287,7 +287,7 @@ const Aside = ({ info }: { info: any; listing?: any }) => {
         </h2>
 
         {showRequestCallback ? (
-          <RequestCallBack closeModal={() => setShowRequestCallback(false)} />
+          <RequestCallBack info={info} closeModal={() => setShowRequestCallback(false)} />
         ) : (
           <Button
             variant="outline"
@@ -448,16 +448,22 @@ const StartChat = ({
   );
 };
 
-const RequestCallBack = ({ closeModal }: { closeModal: () => void }) => {
-  const onSubmit = async (values: any) => {
-    // @ts-ignore
+const RequestCallBack = ({ info, closeModal }: { info: any; closeModal: () => void }) => {
+  const [requestCallbackMutation, { isLoading }] = useRequestCallbackMutation();
+
+  const onSubmit = async (values: any, actions: any) => {
     const data = {
-      name: values.name,
-      phone_number: values.phone_number,
+      property_id: info?.id,
+      customer_name: values.name,
+      phone: values.phone_number,
     };
 
     try {
-      toast.success("Callback request sent");
+      const res = await requestCallbackMutation(data);
+      const message = res?.data?.message;
+
+      toast.success(message || "Callback request sent");
+      actions?.resetForm();
     } catch (error: any) {
       const message = error?.response?.data?.message;
 
@@ -495,7 +501,7 @@ const RequestCallBack = ({ closeModal }: { closeModal: () => void }) => {
         containerStyles="max-w-full mt-0"
         buttonLabel="Request Call back"
         onSubmit={handleSubmit}
-        isSubmitting={false}
+        isSubmitting={isLoading}
       >
         <CustomFormField
           fieldType={FormFieldType.INPUT}
