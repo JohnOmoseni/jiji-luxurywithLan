@@ -1,7 +1,7 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import { categoryFields, leasedFields } from "@/constants";
+import { categoryFields, leasedFields, mainCategories } from "@/constants";
 import { DynamicFieldType } from "@/types";
 import { toast } from "sonner";
 import { useFormik } from "formik";
@@ -36,7 +36,7 @@ function PostAds() {
 
   useEffect(() => {
     if (isError) {
-      const message = (error as any)?.message;
+      const message = (error as any)?.message || (error as any)?.data?.message;
       toast.error(message || "Error fetching listing data");
     }
   }, [isError]);
@@ -88,7 +88,7 @@ function PostAds() {
       condition: "new",
       address: values?.address,
 
-      main_category_id: 1,
+      main_category_id: mainCategories?.find((category) => category?.value === categoryType)?.id,
       sub_categories: [6],
 
       state_id: values?.state,
@@ -112,9 +112,11 @@ function PostAds() {
       }
 
       toast.success(message || `Uploaded Successfully`);
-      navigate("/ads");
+      navigate("/my-ads");
     } catch (error: any) {
-      const message = error?.response?.data?.message;
+      const message = error?.response?.data?.message || error?.data?.message;
+
+      console.log("UPLOAD ERROR", error);
 
       toast.error(message || "Error uploading");
     } finally {
@@ -153,6 +155,14 @@ function PostAds() {
     setStep((prev) => Math.max(1, prev - 1));
   };
 
+  const [form1Values, setForm1Values] = useState<any>(null);
+
+  const handleForm1Submit = (values: any) => {
+    setStaticFields(values);
+    setForm1Values(values);
+    nextStep();
+  };
+
   return (
     <SectionWrapper>
       <div className={cn("card !p-6 max-w-3xl relative mx-auto", step === 2 && "!mt-12")}>
@@ -177,23 +187,22 @@ function PostAds() {
               <FallbackLoader loading={isLoading} hideLabel />
             </div>
           ) : (
-            <div className="">
-              {step === 1 && (
+            <>
+              <div className={cn("block", step === 1 ? "block" : "hidden")}>
                 <PostAdForm
                   step={step}
-                  data={staticFields}
-                  nextStep={nextStep}
+                  data={form1Values || staticFields}
+                  nextStep={handleForm1Submit}
                   states={states}
                   lgas={lgas}
                   selectedState={selectedState}
                   setSelectedState={setSelectedState}
                   files={files}
                   setFiles={setFiles}
-                  setStaticFields={setStaticFields}
                   categoryType={categoryType}
                   setCategoryType={setCategoryType}
                 />
-              )}
+              </div>
 
               {step === 2 && (
                 <PostAdForm2
@@ -211,7 +220,7 @@ function PostAds() {
                 />
               )}
               {step === 3 && <PostSuccess />}
-            </div>
+            </>
           )}
         </div>
       </div>

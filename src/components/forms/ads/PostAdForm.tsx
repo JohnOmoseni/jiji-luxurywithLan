@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { SelectItem } from "@/components/ui/select";
 import { listingTypes, mainCategories } from "@/constants";
 import { useFormik } from "formik";
@@ -14,13 +15,12 @@ type PostPropertyProps = {
   data?: any;
   step: number;
   categoryType?: CategoryTypes;
-  nextStep?: () => void;
+  nextStep?: (values: any) => void;
   states: { label: string; value: string }[];
   lgas: { label: string; value: string }[];
   selectedState: string;
   setFiles: any;
   files: any;
-  setStaticFields: any;
   setCategoryType: any;
   setSelectedState: any;
 };
@@ -33,20 +33,21 @@ const PostAdForm = ({
   selectedState,
   setSelectedState,
   nextStep,
-  files,
   setFiles,
-  setStaticFields,
   setCategoryType,
 }: PostPropertyProps) => {
+  const [hasImageUploaded, setHasImageUploaded] = useState(false);
+
   const onSubmit = async (values: InferType<typeof PostSchema>) => {
-    if (files?.length < 2) {
-      toast.error("Please upload at least 2 images for the ad");
+    if (!hasImageUploaded) {
+      toast.info("Please upload at least 2 images for the ad");
       return;
     }
 
+    setCategoryType(values.category);
+
     try {
-      nextStep?.();
-      setStaticFields({ ...values });
+      nextStep?.(values);
     } catch (error: any) {
       const message = error?.response?.data?.message;
 
@@ -169,31 +170,30 @@ const PostAdForm = ({
           ))}
         </CustomFormField>
 
-        {selectedState ||
-          (values?.lga && (
-            <CustomFormField
-              fieldType={FormFieldType.SELECT}
-              name="lga"
-              label="LGA"
-              onBlur={handleBlur}
-              errors={errors}
-              touched={touched}
-              field={{
-                value: values.lga,
-                placeholder: "",
-              }}
-              onChange={(value: string) => {
-                setFieldValue("lga", value);
-              }}
-              selectList={lgas}
-            >
-              {lgas?.map((item, index) => (
-                <SelectItem key={index} value={item?.value} className="shad-select-item">
-                  {item?.label}
-                </SelectItem>
-              ))}
-            </CustomFormField>
-          ))}
+        {selectedState && (
+          <CustomFormField
+            fieldType={FormFieldType.SELECT}
+            name="lga"
+            label="LGA"
+            onBlur={handleBlur}
+            errors={errors}
+            touched={touched}
+            field={{
+              value: values.lga,
+              placeholder: "",
+            }}
+            onChange={(value: string) => {
+              setFieldValue("lga", value);
+            }}
+            selectList={lgas}
+          >
+            {lgas?.map((item, index) => (
+              <SelectItem key={index} value={item?.value} className="shad-select-item">
+                {item?.label}
+              </SelectItem>
+            ))}
+          </CustomFormField>
+        )}
 
         <CustomFormField
           fieldType={FormFieldType.INPUT}
@@ -254,7 +254,7 @@ const PostAdForm = ({
           }}
           onChange={(value: any) => {
             setFieldValue("category", value);
-            setCategoryType && setCategoryType(value);
+            // setCategoryType && setCategoryType(value);
           }}
           selectList={mainCategories}
         >
@@ -276,6 +276,7 @@ const PostAdForm = ({
               <FormFileUpload
                 title="Upload Images (At least 5 images)"
                 name="mediaImage"
+                setHasImageUploaded={setHasImageUploaded}
                 images={
                   Array.isArray(data?.media) && data?.media?.length > 0
                     ? data?.media?.map((file: any) => file?.file_url)

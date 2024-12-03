@@ -56,7 +56,7 @@ const PostAdForm2 = ({
       onSubmit={handleSubmit}
       isSubmitting={isLoading}
     >
-      {dynamicFields?.length > 0 && (
+      {dynamicFields?.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
           {dynamicFields.map((field, index) => (
             <Fragment key={index}>
@@ -121,6 +121,8 @@ const PostAdForm2 = ({
             </Fragment>
           ))}
         </div>
+      ) : (
+        <p>There are no fields to be displayed. Try again!</p>
       )}
     </FormWrapper>
   );

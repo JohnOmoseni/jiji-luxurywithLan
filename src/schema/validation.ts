@@ -82,7 +82,10 @@ export const ProfilePasswordSchema = yup.object().shape({
 export const PostSchema = yup
   .object()
   .shape({
-    name: yup.string().required("Title is required"),
+    name: yup
+      .string()
+      .required("Title is required")
+      .min(5, "Listing Title must be at least 5 characters"),
     listingType: yup.string().required("Listing type is required"),
     description: yup
       .string()

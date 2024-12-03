@@ -13,6 +13,7 @@ type Props = {
   accept?: string;
   required?: boolean;
   hideSubtitle?: boolean;
+  setHasImageUploaded?: any;
   onFileChange?: (files: string[]) => void;
 };
 
@@ -24,18 +25,18 @@ function FormFileUpload({
   required,
   hideSubtitle,
   onFileChange,
+  setHasImageUploaded,
 }: Props) {
   const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<string[]>(images);
   const [_uploadProgress, setUploadProgress] = useState<Record<number, number>>({});
   const [uploadStatus, setUploadStatus] = useState<Record<number, string>>({});
-  const [hasImageUpload, setHasImageUpload] = useState(false);
 
   useEffect(() => {
     if (images && images?.length > 0) {
       setPreview(images);
       onFileChange?.(images);
-      setHasImageUpload(true); // Set flag to true if images are provided
+      images?.length >= 2 && setHasImageUploaded(true); // Set flag to true if images are provided
     }
   }, [images]);
 
@@ -93,7 +94,11 @@ function FormFileUpload({
       }
     }
 
-    console.log("[IMAGE URLS", imageURLS);
+    console.log("[IMAGE URLS]", imageURLS);
+
+    if (imageURLS.length >= 2) {
+      setHasImageUploaded(true);
+    }
 
     onFileChange?.(imageURLS);
   };
@@ -178,9 +183,9 @@ function FormFileUpload({
           </div>
         </div>
 
-        {hasImageUpload && (
+        {/* {hasImageUploaded && (
           <p className="mt-3 text-green-500 text-xs">At least 2 images uploaded successfully.</p>
-        )}
+        )} */}
       </div>
     </div>
   );

@@ -108,55 +108,6 @@ export const faqs = [
   },
 ];
 
-export const listings = [
-  {
-    id: "1",
-    type: "Property",
-    image: "",
-    title: "Ayana Home Stay",
-    location: "Lagos, Ikeja",
-    price: "120,000,000",
-    tagColor: "blue",
-  },
-
-  {
-    id: "2",
-    type: "Automobile",
-    image: "",
-    title: "Ayana Home Stay",
-    location: "Lagos, Ikeja",
-    price: "120,000,000",
-    tagColor: "green",
-  },
-  {
-    id: "3",
-    type: "Automobile",
-    image: "",
-    title: "Ayana Home Stay",
-    location: "Lagos, Ikeja",
-    price: "120,000,000",
-    tagColor: "green",
-  },
-  {
-    id: "4",
-    type: "Land",
-    image: "",
-    title: "Ayana Home Stay",
-    location: "Lagos, Ikeja",
-    price: "120,000,000",
-    tagColor: "green",
-  },
-  {
-    id: "5",
-    type: "Hotel",
-    image: "",
-    title: "Ayana Home Stay",
-    location: "Lagos, Ikeja",
-    price: "120,000,000",
-    tagColor: "green",
-  },
-];
-
 export const vehicleCategories = [
   { label: "Cars", value: "cars" },
   { label: "Buses & Microbuses", value: "buses" },
@@ -502,10 +453,10 @@ export const categoryFields: Record<string, DynamicFieldType[]> = {
 };
 
 export const mainCategories = [
-  { value: "Land", label: "Land" },
-  { value: "Property", label: "Apartment" },
-  { value: "Automobile", label: "Automobile" },
-  { value: "Hotels", label: "Hotel" },
+  { value: "Land", label: "Land", id: "1" },
+  { value: "Property", label: "Apartment", id: "12" },
+  { value: "Automobile", label: "Automobile", id: "23" },
+  { value: "Hotels", label: "Hotel", id: "34" },
 ];
 
 export const listingTypes = [

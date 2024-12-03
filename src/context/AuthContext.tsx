@@ -68,7 +68,6 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
         setUser(null);
         setRole(null);
         setIsAuthenticated(false);
-        toast.error("Failed to fetch authenticated user.");
       }
     }
   };

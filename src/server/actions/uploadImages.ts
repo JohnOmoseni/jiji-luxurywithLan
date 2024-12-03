@@ -8,8 +8,6 @@ export const uploadChunks = async (
   const chunkSize = 50 * 1024 * 1024; // Sets the size of each chunk
   const totalChunks = Math.ceil(file.size / chunkSize); // Calculates how many chunks are needed to upload the file
 
-  console.log("CHUNK COUNT", totalChunks, file.size);
-
   try {
     const initiateResponse: AxiosResponse = await api.post("/media-upload/initiate", {
       file_name: file.name,
@@ -57,7 +55,6 @@ export const uploadChunks = async (
 
     const image_url = res.data.data?.url || "";
 
-    console.log("[COMPLETE UPLOAD - URL]", res);
     return image_url;
   } catch (error) {
     console.error("Error during chunk media-upload error");

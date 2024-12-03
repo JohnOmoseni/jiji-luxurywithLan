@@ -54,7 +54,7 @@ function Card({ item, isOwnListing, isWishlist }: CardProps) {
       await deleteUserListingMutation({ listing_id: item.id });
 
       toast.success("Ad deleted successfully");
-      navigate("/ads");
+      navigate("/my-ads");
     } catch (error: any) {
       const message = error?.data?.message;
       toast.error(message || "Error deleting ad");
