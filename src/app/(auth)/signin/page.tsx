@@ -32,8 +32,8 @@ function SignIn() {
       if (ssoStatus === "success" && ssoToken) {
         try {
           sessionStorage.setItem("skymeasures-token", JSON.stringify(ssoToken));
-          setHasLoggedInWithGoogle(true);
           await fetchGoogleAuthUser(ssoToken);
+          setHasLoggedInWithGoogle(true);
 
           // Clear the URL parameters after successful authentication
           // const returnTo = searchParams.get("returnTo") || "/";

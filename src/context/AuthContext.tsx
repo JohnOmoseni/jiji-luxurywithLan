@@ -41,9 +41,15 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
 
   const fetchGoogleAuthUser = async (token: string) => {
     try {
-      const res = await axiosBaseUrl.get("/user");
+      const res = await axiosBaseUrl.get("/user", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!res?.data) throw new Error("Error getting authenticated user");
+
+      console.log("RUNNING - [GOOGLE AUTH USER]", res);
 
       const { user } = res.data;
       const currentUser = setUserSession(user, token);
@@ -52,8 +58,6 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
       setUser(currentUser);
       setIsAuthenticated(true);
       setRole(currentUser.role);
-
-      console.log("[AUTH USER]", res);
 
       if (!currentUser.otpVerified && !window.location.search.includes("sso")) {
         navigate("/verify-otp");
