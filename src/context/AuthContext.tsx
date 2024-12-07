@@ -49,10 +49,9 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
 
       if (!res?.data) throw new Error("Error getting authenticated user");
 
-      console.log("RUNNING - [GOOGLE AUTH USER]", res);
-
-      const { user } = res.data;
+      const user = res.data?.data;
       const currentUser = setUserSession(user, token);
+      console.log("RUNNING - [GOOGLE AUTH USER]", res, user);
 
       setToken(token);
       setUser(currentUser);
@@ -128,9 +127,11 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
         name: user.name,
         email: user.email,
         phone: user.phone,
+        alt_phone: user.alt_phone,
+        status: user.status,
         image: user.profile_picture,
         otpVerified: user.email_verified_at || false,
-        role: user.role === "super_admin" ? "ADMIN" : "USER",
+        role: user.role === "admin" ? "ADMIN" : "USER",
       };
 
       setToken(authToken);

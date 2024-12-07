@@ -26,8 +26,9 @@ export type User = {
   name: string;
   email: string;
   phone: string;
+  alt_phone: string;
+  status: string;
   image: string;
-
   otpVerified: boolean;
   role: (typeof APP_ROLES)[keyof typeof APP_ROLES];
 };
