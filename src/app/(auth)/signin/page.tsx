@@ -14,7 +14,7 @@ import CustomFormField, { FormFieldType } from "@/components/forms/CustomFormFie
 function SignIn() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { handleLogin, isLoadingAuth, fetchUser } = useAuth();
+  const { handleLogin, isLoadingAuth, fetchGoogleAuthUser } = useAuth();
   const [searchParams] = useSearchParams();
   const [hasLoggedInWithGoogle, setHasLoggedInWithGoogle] = useState(false);
 
@@ -33,7 +33,7 @@ function SignIn() {
         try {
           sessionStorage.setItem("skymeasures-token", JSON.stringify(ssoToken));
           setHasLoggedInWithGoogle(true);
-          await fetchUser();
+          await fetchGoogleAuthUser(ssoToken);
 
           // Clear the URL parameters after successful authentication
           // const returnTo = searchParams.get("returnTo") || "/";

@@ -39,8 +39,6 @@ function Header({ customHeaderComponentStyles }: HeaderProps) {
     await handleLogout();
   };
 
-  console.log("[USER]", user);
-
   return (
     <div className="sticky top-0 bg-background shadow-sm z-[100] min-h-[60px] w-full">
       <div className="row-flex-btwn gap-6 py-3 px-4 sm:px-5">

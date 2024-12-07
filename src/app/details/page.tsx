@@ -237,7 +237,7 @@ function Details() {
               </div>
             </section>
 
-            <aside className="w-full md:w-72 space-y-4">
+            <aside className="w-full md:w-72 space-y-4 md:sticky md:top-[75px]">
               <Aside info={asideInfo} listing={item} />
             </aside>
           </div>

@@ -52,10 +52,10 @@ const Footer = () => {
             <h3 className="text-[1.05rem] text-white">Contact Info</h3>
 
             <div className="flex-column gap-5 mt-3">
-              <div className="flex-column gap-2">
+              {/* <div className="flex-column gap-2">
                 <p className="text-sm font-light mb-2">Address:</p>
                 <p className="text-xs">
-                  PortHarcourt Office: No 6. Nsirim road off Ada Goerge, Port Harcourt. Rivers
+                  Port-Harcourt Office: No 6. Nsirim road off Ada Goerge, Port Harcourt. Rivers
                   State.
                 </p>
                 <p className="text-xs">
@@ -66,17 +66,16 @@ const Footer = () => {
                   Bayelsa Office: Beside Otiotio Road, Along Isaac Adaka Boro Express Way, Bayelsa
                   State.
                 </p>
-                <p className="text-xs">Lagos Office: Addo Road Beside Ecp-Bank, Lagos State.</p>
+                <p className="text-xs">Lagos Office: Addo Road Beside Eco-Bank, Lagos State.</p>
+              </div> */}
+
+              <div className="row-flex-start gap-1">
+                <span className="text-sm leading-n3 font-light">Phone:</span>
+                <span className=" text-xs">+2349013854829, +2348074764296</span>
               </div>
 
-              <div>
-                <p className="text-sm font-light">Phone:</p>
-                <p className="row-flex-start !flex-wrap gap-x-1.5 text-xs">
-                  <span> +2349013854829, +2348074764296 </span>
-                </p>
-              </div>
-              <div>
-                <p className="text-sm font-light">Email:</p>
+              <div className="row-flex-start gap-1">
+                <span className="text-sm font-light">Email:</span>
                 <a href="mailto:info@luxurywithlan.com" className="text-sm !underline">
                   info@luxurywithlan.com
                 </a>

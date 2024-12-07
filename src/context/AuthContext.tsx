@@ -7,7 +7,7 @@ import { NavigateFunction } from "react-router-dom";
 import { Alert } from "@/constants/icons";
 import { useCallback } from "react";
 import { RegisterUserParams } from "@/types/api.types";
-import { API_DOMAIN } from "@/server/axios";
+import { API_DOMAIN, axiosBaseUrl } from "@/server/axios";
 
 type AuthContextType = {
   user?: User | null;
@@ -21,7 +21,7 @@ type AuthContextType = {
   handleResetPassword: (email: string, password: string, otp: string) => Promise<void>;
   handleLogout: () => Promise<void>;
   handleGoogleLogin: () => void;
-  fetchUser: () => Promise<void>;
+  fetchGoogleAuthUser: (token: string) => Promise<void>;
   isAuthenticated?: boolean;
   isLoadingAuth?: boolean;
 };
@@ -39,14 +39,21 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
   const [isLoadingAuth, setIsLoadingAuth] = useState(false);
   const [role, setRole] = useState<(typeof APP_ROLES)[keyof typeof APP_ROLES] | string | null>();
 
-  const fetchUser = async () => {
+  const fetchGoogleAuthUser = async (token: string) => {
     try {
-      const res = await authApi.getAuthUser();
+      const res = await axiosBaseUrl.get("/user");
 
-      if (!res?.status) throw new Error(res?.message || "Error getting authenticated user");
+      if (!res?.data) throw new Error("Error getting authenticated user");
 
-      const { user, token: authToken } = res.data;
-      const currentUser = setUserSession(user, authToken);
+      const { user } = res.data;
+      const currentUser = setUserSession(user, token);
+
+      setToken(token);
+      setUser(currentUser);
+      setIsAuthenticated(true);
+      setRole(currentUser.role);
+
+      console.log("[AUTH USER]", res);
 
       if (!currentUser.otpVerified && !window.location.search.includes("sso")) {
         navigate("/verify-otp");
@@ -55,11 +62,11 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
       }
     } catch (error) {
       const storedUser = sessionStorage.getItem("currentUser");
-      const token = sessionStorage.getItem("skymeasures-token");
+      const storedToken = sessionStorage.getItem("skymeasures-token");
 
-      if (storedUser && token) {
-        const currentUser = JSON.parse(storedUser || "{}");
-        setToken(JSON.parse(token || '"'));
+      if (storedUser && storedToken) {
+        const currentUser = JSON.parse(storedUser);
+        setToken(JSON.parse(storedToken));
         setUser(currentUser);
         setIsAuthenticated(true);
         setRole(currentUser.role);
@@ -73,6 +80,40 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
   };
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await authApi.getAuthUser();
+
+        if (!res?.status) throw new Error(res?.message || "Error getting authenticated user");
+
+        const { user, token: authToken } = res.data;
+        const currentUser = setUserSession(user, authToken);
+
+        console.log("[AUTH USER]", res);
+
+        if (!currentUser.otpVerified && !window.location.search.includes("sso")) {
+          navigate("/verify-otp");
+        } else if (window.location.pathname === "/verify-otp") {
+          navigate("/");
+        }
+      } catch (error) {
+        const storedUser = sessionStorage.getItem("currentUser");
+        const token = sessionStorage.getItem("skymeasures-token");
+
+        if (storedUser && token) {
+          const currentUser = JSON.parse(storedUser || "{}");
+          setToken(JSON.parse(token || '"'));
+          setUser(currentUser);
+          setIsAuthenticated(true);
+          setRole(currentUser.role);
+        } else {
+          setToken(null);
+          setUser(null);
+          setRole(null);
+          setIsAuthenticated(false);
+        }
+      }
+    };
     fetchUser();
   }, []);
 
@@ -302,7 +343,7 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
         handleResetPassword,
         handleRegister,
         handleGoogleLogin,
-        fetchUser,
+        fetchGoogleAuthUser,
       }}
       {...props}
     >

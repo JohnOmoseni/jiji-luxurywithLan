@@ -26,6 +26,7 @@ import Reviews from "./app/review/page";
 import WishLists from "./app/wishlists/page";
 import PostAds from "./app/ads/PostAds";
 import Messaging from "./app/messaging/page";
+import PrivacyPolicy from "./app/policy/page";
 
 const AppRouter = () => {
   return (
@@ -57,6 +58,7 @@ const AppRouter = () => {
               <Route path="/listings/:id" element={<Details />} />
               <Route path="/faqs" element={<FAQS />} />
               <Route path="/reviews/:id" element={<Reviews />} />
+              <Route path="/policy" element={<PrivacyPolicy />} />
 
               <Route
                 element={

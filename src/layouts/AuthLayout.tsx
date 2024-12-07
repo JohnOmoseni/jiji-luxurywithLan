@@ -9,7 +9,7 @@ export default function AuthLayout() {
   return (
     <div
       className={cn(
-        "relative grid place-items-center gap-3 sm:gap-5 h-full bg-background-100 w-full overflow-x-hidden px-3 overflow-y-auto",
+        "relative grid place-items-center gap-3 h-full bg-background-100 w-full overflow-x-hidden px-3 overflow-y-auto",
         !isSignupPage ? "py-3" : "py-4"
       )}
     >

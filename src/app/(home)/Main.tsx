@@ -1,17 +1,14 @@
 import { mainTabs } from "@/constants";
-import { KeyboardArrowDown, KeyboardArrowRight, property_image } from "@/constants/icons";
+import { KeyboardArrowDown, KeyboardArrowRight } from "@/constants/icons";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useEffect, useMemo, useState } from "react";
-import { useAppDispatch } from "@/types";
-import { setSelectedCategory } from "@/redux/features/appSlice";
 
 import Collection from "../_sections/Collection";
 
 function Main({ data }: { data: any[] }) {
   const [activeTab, setActiveTab] = useState(0);
   const [filteredData, setFilteredData] = useState<any[]>([]);
-  const dispatch = useAppDispatch();
 
   // Memoize the filter function to prevent unnecessary recalculations
   const filterData = useMemo(() => {
@@ -19,9 +16,7 @@ function Main({ data }: { data: any[] }) {
       return data;
     }
 
-    return data
-      ? data.filter((item) => item.main_category_name === mainTabs[activeTab]?.value)
-      : [];
+    return data ? data.filter((item) => item?.main_category_name === mainTabs[activeTab]?.id) : [];
   }, [data, activeTab]);
 
   // Update filtered data whenever data or activeTab changes
@@ -31,7 +26,6 @@ function Main({ data }: { data: any[] }) {
 
   const changeTab = (id: number) => {
     setActiveTab(id);
-    dispatch(setSelectedCategory(mainTabs[id]?.value));
   };
 
   return (
@@ -39,7 +33,7 @@ function Main({ data }: { data: any[] }) {
       <Aside activeTab={activeTab} changeTab={changeTab} />
 
       <div className="flex-column gap-8 max-sm:mt-12">
-        <div className="bg-secondary rounded-xl shadow">
+        {/* <div className="bg-secondary rounded-xl shadow">
           <div className="grid grid-cols-1 sm:grid-cols-[minmax(160px,_320px),_1fr] gap-3">
             <div className="h-[60vh] max-h-[330px] relative">
               <img
@@ -59,7 +53,7 @@ function Main({ data }: { data: any[] }) {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex-column gap-4 mt-4">
           <div className="row-flex-btwn gap-3">
@@ -73,7 +67,7 @@ function Main({ data }: { data: any[] }) {
           {filteredData && filteredData?.length > 0 ? (
             <Collection
               data={filteredData}
-              containerStyles="sm:grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))]"
+              containerStyles="sm:grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] !place-items-start"
             />
           ) : (
             <div className="text-center grid place-items-center h-[200px] py-8 text-foreground-100">
