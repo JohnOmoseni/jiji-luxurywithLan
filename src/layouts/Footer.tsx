@@ -9,7 +9,7 @@ const Footer = () => {
   return (
     <footer
       className={cn(
-        "bg-secondary text-secondary-foreground relative max-[480px]:mt-8 mt-20 md:mt-40 lg:mt-56",
+        "bg-secondary text-secondary-foreground relative max-[480px]:mt-14 mt-20 md:mt-40 lg:mt-56",
         isChatPage && "hidden"
       )}
     >

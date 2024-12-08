@@ -50,8 +50,8 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
       if (!res?.data) throw new Error("Error getting authenticated user");
 
       const user = res.data?.data;
-      const currentUser = setUserSession(user, token);
-      console.log("RUNNING - [GOOGLE AUTH USER]", res, user);
+      const currentUser = setUserSession(user, token, true);
+      console.log("RUNNING - [GOOGLE AUTH USER]", user);
 
       setToken(token);
       setUser(currentUser);
@@ -121,7 +121,7 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
   }, []);
 
   const setUserSession = useCallback(
-    (user: any, authToken: string) => {
+    (user: any, authToken: string, ssoAuth?: boolean) => {
       const currentUser = {
         userId: user.id,
         name: user.name,
@@ -130,7 +130,7 @@ export default function AuthProvider({ children, navigate, ...props }: AuthProvi
         alt_phone: user.alt_phone,
         status: user.status,
         image: user.profile_picture,
-        otpVerified: user.email_verified_at || false,
+        otpVerified: ssoAuth || Boolean(user.email_verified_at),
         role: user.role === "admin" ? "ADMIN" : "USER",
       };
 

@@ -10,29 +10,27 @@ export const bookingSlice = api.injectEndpoints({
       query: ({ booking_id }: { booking_id: number }) => `/bookings/${booking_id}`,
     }),
 
+    createBooking: builder.mutation({
+      query: (data) => ({
+        url: `/bookings`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: () => [{ type: "Bookings" }] as any,
+    }),
+
     updateBooking: builder.mutation({
-      query: ({ property_id, ...payload }: any) => ({
-        url: `/properties/${property_id}`,
+      query: ({ booking_id, ...payload }) => ({
+        url: `/bookings/${booking_id}`,
         method: "PUT",
         body: payload,
       }),
       invalidatesTags: () => [{ type: "Bookings" }] as any,
     }),
 
-    updateBookingPublish: builder.mutation({
-      query: ({ property_id, is_published }: { property_id: number; is_published: boolean }) => ({
-        url: `/properties/${property_id}`,
-        method: "PUT",
-        body: {
-          is_published: is_published,
-        },
-      }),
-      invalidatesTags: () => [{ type: "Bookings" }] as any,
-    }),
-
     deleteBooking: builder.mutation({
-      query: ({ property_id }) => ({
-        url: `/properties/${property_id}`,
+      query: ({ booking_id }) => ({
+        url: `/bookings/${booking_id}`,
         method: "DELETE",
       }),
       invalidatesTags: () => [{ type: "Bookings" }] as any,
@@ -44,7 +42,7 @@ export const bookingSlice = api.injectEndpoints({
 export const {
   useGetAllBookingsQuery,
   useGetBookingByIDQuery,
+  useCreateBookingMutation,
   useUpdateBookingMutation,
-  useUpdateBookingPublishMutation,
   useDeleteBookingMutation,
 } = bookingSlice;

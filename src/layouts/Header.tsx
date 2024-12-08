@@ -1,7 +1,6 @@
 import {
   Adverts,
   ArrowRight,
-  Bell,
   Chatbox,
   KeyboardArrowDown,
   Logo,
@@ -10,7 +9,6 @@ import {
   profile,
   WishListIcon,
 } from "@/constants/icons";
-import { PopoverWrapper } from "@/components/ui/components/PopoverWrapper";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { DropdownList } from "@/components/ui/components/DropdownList";
@@ -84,19 +82,6 @@ function Header({ customHeaderComponentStyles }: HeaderProps) {
                 }
                 content="My Adverts"
               />
-
-              <PopoverWrapper
-                containerStyles="rounded-xl border-border-100 min-w-[360px] py-6 max-sm:mr-2"
-                trigger={
-                  <span className="icon-div relative" title="Notification">
-                    <Bell className="size-3 sm:size-4" />
-
-                    <span className="absolute size-1.5 bg-red-500 rounded-full top-[0.2rem] right-[0.3rem] sm:right-[0.42rem] sm:top-[0.25rem]"></span>
-                  </span>
-                }
-              >
-                <Notification />
-              </PopoverWrapper>
             </>
           )}
 
@@ -169,6 +154,7 @@ function Header({ customHeaderComponentStyles }: HeaderProps) {
 
 export default Header;
 
+// @ts-ignore
 const Notification = () => (
   <div className="flex-column gap-3 px-1.5">
     <div className="row-flex-btwn gap-4">

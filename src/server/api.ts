@@ -31,7 +31,7 @@ export const api = createApi({
   baseQuery: customBaseQuery,
   endpoints: () => ({}),
   reducerPath: "api",
-  tagTypes: ["Market", "Bookings", "Profile", "Complaint", "Listing", "Chat", "Review"],
+  tagTypes: ["Market", "Hotels", "Bookings", "Profile", "Complaint", "Listing", "Chat", "Review"],
 });
 
 export default api;

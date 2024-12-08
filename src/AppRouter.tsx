@@ -27,6 +27,8 @@ import WishLists from "./app/wishlists/page";
 import PostAds from "./app/ads/PostAds";
 import Messaging from "./app/messaging/page";
 import PrivacyPolicy from "./app/policy/page";
+import HotelListings from "./app/hotel/page";
+import CreateHotel from "./app/hotel/CreateHotel";
 
 const AppRouter = () => {
   return (
@@ -68,6 +70,8 @@ const AppRouter = () => {
                 }
               >
                 <Route path="/my-ads" element={<Ads />} />
+                <Route path="/my-hotels" element={<HotelListings />} />
+                <Route path="/my-hotels/create" element={<CreateHotel />} />
                 <Route path="/ads/post" element={<PostAds />} />
                 <Route path="/ads/edit-advert/:id" element={<PostAds />} />
                 <Route path="/wishlist" element={<WishLists />} />

@@ -8,15 +8,19 @@ function PrivacyPolicy() {
       <Header />
       <Hero headerTitle="Privacy policy" />
 
-      <main className="w-full py-4 px-4 sm:pt-12 sm:px-[5%]">
+      <main className="w-full py-7 px-4 sm:pt-12 sm:px-[5%]">
         <div className="flex-column gap-6 md:gap-10">
           <p className="pr-1">
             {privacyPolicy[0]?.introduction &&
-              privacyPolicy[0]?.introduction
-                .split("\n")
-                .map((line, index) =>
-                  line.trim() !== "" ? <p key={index}>{line}</p> : <br key={index} />
-                )}
+              privacyPolicy[0]?.introduction.split("\n").map((line, index) =>
+                line.trim() !== "" ? (
+                  <p key={index} className="">
+                    {line}
+                  </p>
+                ) : (
+                  <br key={index} />
+                )
+              )}
           </p>
 
           <div className="flex-column gap-6">
@@ -26,7 +30,7 @@ function PrivacyPolicy() {
                   key={idx}
                   className="flex-column sm:grid grid-cols-[minmax(auto,_200px)_1fr] gap-x-4 gap-y-3"
                 >
-                  <h3 className="font-semibold text-[1rem]">{paragraph?.label}</h3>
+                  <h3 className="font-bold text-[1rem]">{paragraph?.label}</h3>
 
                   <p className="pr-2">
                     {paragraph?.body &&

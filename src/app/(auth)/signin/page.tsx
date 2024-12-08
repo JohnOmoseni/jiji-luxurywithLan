@@ -26,7 +26,6 @@ function SignIn() {
   useEffect(() => {
     const ssoStatus = searchParams.get("sso-signin-status");
     const ssoToken = searchParams.get("token");
-    console.log("STATUS", ssoStatus, ssoToken);
 
     const handleSSOAuth = async () => {
       if (ssoStatus === "success" && ssoToken) {
