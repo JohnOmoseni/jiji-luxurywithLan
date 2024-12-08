@@ -2,8 +2,12 @@ import api from "../api";
 
 export const marketSlice = api.injectEndpoints({
   endpoints: (builder) => ({
+    // Get current URL search params
     getMarketItems: builder.query({
-      query: () => `/market/properties`,
+      query: () => {
+        const searchParams = new URLSearchParams(window.location.search);
+        return `/market/properties?${searchParams.toString()}`;
+      },
       keepUnusedDataFor: 0,
     }),
 

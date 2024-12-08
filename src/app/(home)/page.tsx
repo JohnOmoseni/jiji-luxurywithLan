@@ -7,7 +7,7 @@ import Header from "@/layouts/Header";
 import FallbackLoader from "@/components/fallback/FallbackLoader";
 
 function Home() {
-  const { data, isError, isLoading, error } = useGetMarketItemsQuery({});
+  const { data, isError, isFetching, error, refetch } = useGetMarketItemsQuery({});
   const markets = data?.data?.data;
 
   console.log("[MARKETS]", markets);
@@ -22,12 +22,12 @@ function Home() {
   return (
     <>
       <Header />
-      <Hero />
+      <Hero refetch={refetch} />
 
       <main className="w-full py-4 px-4 sm:pt-16 sm:px-[8%]">
-        {isLoading ? (
+        {isFetching ? (
           <div className="relative h-[50vh] max-h-[300px]">
-            <FallbackLoader loading={isLoading} />
+            <FallbackLoader loading={isFetching} />
           </div>
         ) : (
           <Main data={markets} />

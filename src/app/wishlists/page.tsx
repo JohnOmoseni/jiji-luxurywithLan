@@ -16,9 +16,13 @@ function WishLists() {
 
   useEffect(() => {
     if (hasMutated) {
-      refetch().then(() => {
-        dispatch(setHasMutated(false));
-      });
+      const timer = setTimeout(() => {
+        refetch().then(() => {
+          dispatch(setHasMutated(false));
+        });
+      }, 2000);
+
+      return () => clearTimeout(timer);
     }
   }, [hasMutated, refetch, dispatch]);
 

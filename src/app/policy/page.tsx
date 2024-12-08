@@ -1,12 +1,13 @@
 import { privacyPolicy } from "@/constants";
-import Hero from "../(home)/Hero";
 import Header from "@/layouts/Header";
 
 function PrivacyPolicy() {
   return (
     <>
       <Header />
-      <Hero headerTitle="Privacy policy" />
+      <div className="bg-gradient-hero min-h-[35vh] max-h-[300px] grid place-items-center px-6 py-6 sm:py-4 text-secondary-foreground">
+        <h1 className="text-white text-center max-w-[30ch]">Privacy Policy</h1>
+      </div>
 
       <main className="w-full py-7 px-4 sm:pt-12 sm:px-[5%]">
         <div className="flex-column gap-6 md:gap-10">
