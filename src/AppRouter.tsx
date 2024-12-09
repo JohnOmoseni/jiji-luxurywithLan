@@ -71,7 +71,7 @@ const AppRouter = () => {
               >
                 <Route path="/my-ads" element={<Ads />} />
                 <Route path="/my-hotels" element={<HotelListings />} />
-                <Route path="/my-hotels/create" element={<CreateHotel />} />
+                <Route path="/my-hotels/post" element={<CreateHotel />} />
                 <Route path="/ads/post" element={<PostAds />} />
                 <Route path="/ads/edit-advert/:id" element={<PostAds />} />
                 <Route path="/wishlist" element={<WishLists />} />

@@ -15,7 +15,7 @@ type ListHotelProps = {
   type: "post" | "edit";
 };
 
-const ListHotel = ({ data, type }: ListHotelProps) => {
+const ListHostelForm = ({ data, type }: ListHotelProps) => {
   const [files, setFiles] = useState<any[]>([]);
   const [selectedState, setSelectedState] = useState("");
   const [_hasImageUploaded, setHasImageUploaded] = useState(false);
@@ -60,7 +60,7 @@ const ListHotel = ({ data, type }: ListHotelProps) => {
       initialValues: {
         name: data?.name || "",
         address: data?.address || "",
-        district: data?.district || "",
+        area: data?.area || "",
         state: data?.state_id ? String(data?.state_id) : "",
         lga: data?.lga_id ? String(data?.lga_id) : "",
       },
@@ -107,14 +107,14 @@ const ListHotel = ({ data, type }: ListHotelProps) => {
 
         <CustomFormField
           fieldType={FormFieldType.INPUT}
-          name="district"
-          label="District"
+          name="area"
+          label="Area"
           onBlur={handleBlur}
           errors={errors}
           touched={touched}
           onChange={handleChange}
           field={{
-            value: values.district,
+            value: values.area,
             placeholder: "e.g. Ikorodu",
           }}
         />
@@ -198,4 +198,4 @@ const ListHotel = ({ data, type }: ListHotelProps) => {
   );
 };
 
-export default ListHotel;
+export default ListHostelForm;

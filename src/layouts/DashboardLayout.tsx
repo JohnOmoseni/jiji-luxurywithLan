@@ -8,7 +8,9 @@ export default function DashboardLayout() {
   return (
     <>
       <div className="w-full h-full bg-background-100 overflow-x-hidden overflow-y-auto">
-        <Outlet />
+        <div className="min-h-[70vh]">
+          <Outlet />
+        </div>
 
         {!isChatPage && <Footer />}
       </div>

@@ -49,7 +49,7 @@ function Hero({ containerStyles, refetch }: Props) {
           <div className="h-[40px] overflow-hidden">
             <h1
               className={cn(
-                "block transition-transform duration-500",
+                "block transition-transform duration-500 font-amatic",
                 isAnimating && "transform translate-y-full"
               )}
             >

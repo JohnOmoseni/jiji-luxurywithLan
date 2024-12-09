@@ -31,7 +31,7 @@ function Header({ customHeaderComponentStyles }: HeaderProps) {
   const navigate = useNavigate();
 
   const { selectedCategory } = useAppSelector((state) => state.appState);
-  const isPostPage = pathname.includes("/ads/post");
+  const isPostPage = pathname.includes("/post");
 
   const onLogout = async () => {
     await handleLogout();
@@ -85,9 +85,9 @@ function Header({ customHeaderComponentStyles }: HeaderProps) {
             </>
           )}
 
-          <div className="sm:row-flex gap-2 hidden">
+          <div className="gap-2 row-flex">
             {user ? (
-              <Link to="/profile" className="">
+              <Link to="/profile" className="hidden sm:block">
                 <AvatarWrapper
                   containerClassName="max-sm:order-2"
                   fallback={getInitials(user?.name)}
@@ -105,14 +105,14 @@ function Header({ customHeaderComponentStyles }: HeaderProps) {
               <DropdownList
                 trigger={
                   <div className="row-flex-btwn gap-1">
-                    <p className="w-full break-words text-sm max-w-[10ch] text-center font-semibold leading-4">
+                    <p className="w-full break-words text-xs sm:text-sm max-w-[10ch] text-center font-semibold leading-4 line-clamp-2">
                       {user?.name || "User"}
                     </p>
 
                     <KeyboardArrowDown className="size-4 cursor-pointer" />
                   </div>
                 }
-                containerStyles="min-w-[6rem] header-popover-content"
+                containerStyles="min-w-[6rem] max-sm:-mr-3 header-popover-content"
                 list={["Profile", "Log out"]}
                 renderItem={(item, idx) => {
                   return (
@@ -139,7 +139,10 @@ function Header({ customHeaderComponentStyles }: HeaderProps) {
           <Button
             icon={Plus}
             title="Post"
-            className={cn("group-hover:scale-95", isPostPage && "!hidden")}
+            className={cn(
+              "group-hover:scale-95 max-[400px]:!px-2.5 max-[400px]:!gap-1",
+              isPostPage && "!hidden"
+            )}
             onClick={() =>
               user
                 ? navigate("/ads/post", { state: { category: selectedCategory } })

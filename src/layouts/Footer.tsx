@@ -13,7 +13,7 @@ const Footer = () => {
         isChatPage && "hidden"
       )}
     >
-      <FooterImage className="absolute bottom-[97%] min-[400px]:bottom-[98%] left-0 right-0 min-h-[100px] max-h-[180px]  w-full h-fit" />
+      <FooterImage className="absolute bottom-[97%] left-0 right-0 min-h-[100px] max-h-[180px] w-full h-fit" />
 
       <div className="md:row-flex-btwn mt-8 flex-column gap-12 px-4 py-6 sm:pt-[5%] md:gap-6 md:px-[4%] !items-start">
         <div className="flex-column w-4/5">
@@ -48,7 +48,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="w-full ">
+          <div className="w-full md:mt-[0.4rem]">
             <h3 className="text-[1.05rem] text-white">Contact Info</h3>
 
             <div className="flex-column gap-5 mt-3">
