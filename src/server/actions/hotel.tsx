@@ -4,10 +4,19 @@ export const hotelSlice = api.injectEndpoints({
   endpoints: (builder) => ({
     getAllHotels: builder.query({
       query: () => `/stores`,
+      providesTags: (result) => {
+        console.log("RESULT", result);
+        return [
+          { type: "Hotels", id: "LIST" },
+          ...(result?.data?.data?.map(({ id }: { id: number }) => ({ type: "Hotels", id })) || []),
+        ];
+      },
     }),
 
     getHotelByID: builder.query({
-      query: ({ hotel_id }: { hotel_id: number }) => `/stores/${hotel_id}`,
+      query: ({ hotel_id }) => `/stores/${hotel_id}`,
+      // @ts-ignore
+      providesTags: (result, error, arg) => [{ type: "Hotels", id: arg.hotel_id }],
     }),
 
     listHotel: builder.mutation({
@@ -16,6 +25,7 @@ export const hotelSlice = api.injectEndpoints({
         method: "POST",
         body: data,
       }),
+
       invalidatesTags: () => [{ type: "Hotels" }] as any,
     }),
 

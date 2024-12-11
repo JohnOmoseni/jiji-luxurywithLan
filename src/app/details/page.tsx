@@ -9,7 +9,11 @@ import {
   Verified,
   WishListIcon,
 } from "@/constants/icons";
-import { useGetItemByIDQuery, useRequestCallbackMutation } from "@/server/actions/market";
+import {
+  useGetItemByIDQuery,
+  useGetMarketItemsQuery,
+  useRequestCallbackMutation,
+} from "@/server/actions/market";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -375,14 +379,43 @@ const Aside = ({ info }: { info: any; listing?: any }) => {
 };
 
 const SimilarAdverts = () => {
+  const { id } = useParams();
+  const { data, isError, isFetching, error } = useGetMarketItemsQuery({});
+  const markets = data?.data?.data;
+
+  useEffect(() => {
+    if (isError) {
+      const message = (error as any)?.message || (error as any)?.data?.message;
+      toast.error(message || "Error fetching similar listings");
+    }
+  }, [isError]);
+
+  const similarItems = useMemo(() => {
+    if (!markets || !id) return [];
+
+    return markets.filter((item: any) => {
+      if (item.id === parseInt(id)) return false;
+
+      // Match items with same main category as current listing
+      const currentItem = markets.find((market: any) => market.id === parseInt(id));
+      return item?.main_category_name === currentItem?.main_category_name;
+    });
+  }, [markets, id, data]);
+
   return (
     <div className="flex-column gap-4 mt-8 sm:mt-12">
-      <h2>Similar adverts</h2>
+      <h2>Recommended for you</h2>
 
-      <Collection
-        data={[]}
-        containerStyles="sm:grid-cols-[repeat(auto-fit,_minmax(200px,_230px))]"
-      />
+      {isFetching ? (
+        <div className="relative h-[50vh] max-h-[300px]">
+          <FallbackLoader loading={isFetching} />
+        </div>
+      ) : (
+        <Collection
+          data={similarItems}
+          containerStyles="sm:grid-cols-[repeat(auto-fit,_minmax(200px,_230px))]"
+        />
+      )}
     </div>
   );
 };

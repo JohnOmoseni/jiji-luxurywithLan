@@ -67,6 +67,7 @@ function Main({ data }: { data: any[] }) {
           {filteredData && filteredData?.length > 0 ? (
             <Collection
               data={filteredData}
+              collectionType="All"
               containerStyles="sm:grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] !place-items-start"
             />
           ) : (

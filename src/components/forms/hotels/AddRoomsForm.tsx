@@ -11,7 +11,7 @@ import CustomFormField, { FormFieldType } from "@/components/forms/CustomFormFie
 import FormFileUpload from "../FormFileUpload";
 import MultipartFormWrapper from "../MultipartFormWrapper";
 
-type PostPropertyProps = {
+type AddRoomsFormProps = {
   data?: any;
   step: number;
   categoryType?: CategoryTypes;
@@ -25,7 +25,7 @@ type PostPropertyProps = {
   setSelectedState: any;
 };
 
-const PostAdForm = ({
+const AddRoomsForm = ({
   data,
   categoryType,
   states,
@@ -35,7 +35,7 @@ const PostAdForm = ({
   nextStep,
   setFiles,
   setCategoryType,
-}: PostPropertyProps) => {
+}: AddRoomsFormProps) => {
   const [hasImageUploaded, setHasImageUploaded] = useState(false);
 
   const onSubmit = async (values: InferType<typeof PostSchema>) => {
@@ -59,7 +59,7 @@ const PostAdForm = ({
     useFormik({
       initialValues: {
         name: data?.name || "",
-        listingType: data?.type || "",
+        listingType: data?.type || "book",
         description: data?.description || "",
         address: data?.address || "",
         district: data?.district || "",
@@ -67,7 +67,7 @@ const PostAdForm = ({
         lga: data?.lga_id ? String(data?.lga_id) : "",
         amount: data?.amount || "",
         actual_amount: data?.actual_amount || "",
-        category: categoryType || "",
+        category: categoryType || "Hotel",
         is_negotiable: data?.is_negotiable || false,
       },
       validationSchema: PostSchema,
@@ -82,7 +82,7 @@ const PostAdForm = ({
           <CustomFormField
             fieldType={FormFieldType.INPUT}
             name="name"
-            label="Title/Name"
+            label="Room Title"
             onBlur={handleBlur}
             errors={errors}
             touched={touched}
@@ -254,7 +254,6 @@ const PostAdForm = ({
           }}
           onChange={(value: any) => {
             setFieldValue("category", value);
-            // setCategoryType && setCategoryType(value);
           }}
           selectList={mainCategories}
         >
@@ -292,4 +291,4 @@ const PostAdForm = ({
   );
 };
 
-export default PostAdForm;
+export default AddRoomsForm;

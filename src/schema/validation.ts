@@ -96,7 +96,13 @@ export const PostSchema = yup
     lga: yup.string(),
     district: yup.string().required("District is required"),
     amount: yup.string().required("Discount price is required"),
-    actual_amount: yup.string().required("Actual price is required"),
+    actual_amount: yup
+      .string()
+      .required("Actual price is required")
+      .test("max-amount", "Actual price must be less than discount price", function (value) {
+        const amount = parseFloat(this.parent.amount);
+        return parseFloat(value || "0") < amount;
+      }),
     category: yup.string().required("Category is required"),
     is_negotiable: yup.boolean().required("Negotiability status is required"),
 
@@ -113,3 +119,31 @@ export const PostSchema = yup
 
     return true;
   });
+
+export const ListHostelSchema = yup.object().shape({
+  name: yup.string().required("Name is required"),
+  address: yup.string().required("Address is required"),
+  area: yup.string().required("Area is required"),
+  state: yup.string().required("State is required"),
+  lga: yup.string().required("LGA is required"),
+});
+
+export const BookHotelSchema = yup.object().shape({
+  name: yup.string().required("Name is required"),
+  email: yup.string().email("Invalid email address").required("Email is required"),
+  phone_number: yup
+    .string()
+    .test("is-valid-phone", "Please enter a valid phone number", (value) =>
+      isValidPhoneNumber(value!, "NG")
+    )
+    .required("Phone number is required"),
+  fromDate: yup.date().required("From date is required"),
+  toDate: yup.date().required("To date is required"),
+  arrival_time: yup.string().required("Arrival time is required"),
+  payment_type: yup
+    .string()
+    .oneOf(["pay_on_reach"], "Payment type is required")
+    .default("pay_on_reach"),
+  number_of_persons: yup.string().required("Number of persons is required").default("1"),
+  message: yup.string().required("Message is required"),
+});

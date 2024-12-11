@@ -1,25 +1,26 @@
-import { locations, socials } from "@/constants";
-import { ArrowRight, FooterImage } from "@/constants/icons";
+import { locationCategories, socials } from "@/constants";
+import { appleicon, ArrowRight, FooterImage, googleplayicon } from "@/constants/icons";
 import { cn } from "@/lib/utils";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const { pathname } = useLocation();
   const isChatPage = pathname.includes("messaging");
+  const navigate = useNavigate();
+
   return (
     <footer
       className={cn(
         "bg-secondary text-secondary-foreground relative max-[480px]:mt-14 mt-20 md:mt-40 lg:mt-56",
+        // "bg-secondary text-secondary-foreground relative mt-auto",
         isChatPage && "hidden"
       )}
     >
       <FooterImage className="absolute bottom-[97%] left-0 right-0 min-h-[100px] max-h-[180px] w-full h-fit" />
 
-      <div className="md:row-flex-btwn mt-8 flex-column gap-12 px-4 py-6 sm:pt-[5%] md:gap-6 md:px-[4%] !items-start">
-        <div className="flex-column w-4/5">
+      <div className="md:row-flex-btwn mt-8 flex-column gap-12 px-4 py-6 sm:pt-[4%] md:gap-6 md:px-[4%] !items-start">
+        <div className="flex-column w-full md:w-[50%]">
           <Link to="/" className="group relative">
-            {/* <img src={logo} className="w-fit h-24" />
-             */}
             <h2 className="text-white">Luxury With Lan</h2>
           </Link>
 
@@ -33,16 +34,41 @@ const Footer = () => {
           </p>
         </div>
 
-        <div className="flex-column flex w-full justify-between gap-12 md:flex-row">
+        <div className="flex-column flex w-full justify-between gap-8 md:gap-12 md:flex-row">
+          <div className="flex flex-row flex-wrap sm:flex-col gap-4">
+            <a
+              href="https://play.google.com/store/apps/details?id=com.qataloogAndroid.qataloog&pli=1"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-40 md:w-fit md:min-w-32"
+            >
+              <img src={googleplayicon} alt="Google Play" className="w-full" />
+            </a>
+            <a
+              href="https://apps.apple.com/us/app/qataloog/id6471869090"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-40 md:w-fit md:min-w-32"
+            >
+              <img src={appleicon} alt="App Store" className="w-full" />
+            </a>
+          </div>
+
           <div className="w-full md:w-[50%]">
             <h3 className="text-lg text-white">Location</h3>
 
             <ul className="flex-column mt-4 gap-4 text-base">
-              {locations.map((item) => {
+              {locationCategories.map((item) => {
                 return (
-                  <p key={item} className="transition-colors">
-                    {item}
-                  </p>
+                  <li
+                    key={item.value}
+                    className="transition-colors cursor-pointer"
+                    onClick={() => {
+                      navigate(`/listings?state=${item.value}`);
+                    }}
+                  >
+                    {item?.label}
+                  </li>
                 );
               })}
             </ul>

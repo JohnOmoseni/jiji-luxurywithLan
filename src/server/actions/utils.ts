@@ -18,12 +18,11 @@ export const utilsSlice = api.injectEndpoints({
     }),
 
     getAllLGAs: builder.query({
-      query: ({ state_id }: { state_id: string }) => `/state/${state_id}/children`,
+      query: ({ state_id }: { state_id?: string } = {}) => `/state/${state_id}/children`,
       transformResponse: (responseData: any) => {
         const data = responseData.data;
 
         const lgas = data?.map((lga: any) => ({ label: lga.name, value: String(lga.id) }));
-
         return lgas;
       },
     }),

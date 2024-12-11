@@ -7,7 +7,11 @@ import {
   IoSend as Send,
   IoChatbox as Chatbox,
 } from "react-icons/io5";
-import { FaClipboardList as Adverts, FaTags as WishListIcon } from "react-icons/fa";
+import {
+  FaClipboardList as Adverts,
+  FaTags as WishListIcon,
+  FaHotel as HotelIcon,
+} from "react-icons/fa";
 import { FcGoogle as Google } from "react-icons/fc";
 import { BiDotsVertical as VerticalDots } from "react-icons/bi";
 
@@ -75,6 +79,8 @@ import house_image from "/images/house-image.jpeg";
 import profile from "/images/fallback_image.png";
 import logo from "/images/logo.png";
 import property_image from "/images/property_image.png";
+import googleplayicon from "../assets/svgs/google-play.svg";
+import appleicon from "../assets/svgs/app-store.svg";
 
 export {
   Menu,
@@ -103,6 +109,7 @@ export {
   Check,
   Remove,
   Google,
+  HotelIcon,
   Car,
   Trash,
   Edit,
@@ -130,4 +137,6 @@ export {
   car_image,
   house_image,
   property_image,
+  googleplayicon,
+  appleicon,
 };

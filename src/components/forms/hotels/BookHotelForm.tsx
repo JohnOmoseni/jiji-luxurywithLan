@@ -5,9 +5,12 @@ import { DatePicker } from "@/components/ui/components/Calendar";
 import { Label } from "@/components/ui/label";
 import { Value } from "react-phone-number-input";
 import { useCreateBookingMutation, useUpdateBookingMutation } from "@/server/actions/bookings";
+import { useNavigate } from "react-router-dom";
+import { BookHotelSchema } from "@/schema/validation";
 
 import CustomFormField, { FormFieldType } from "@/components/forms/CustomFormField";
 import FormWrapper from "../FormWrapper";
+import { InferType } from "yup";
 
 type BookHotelProps = {
   data?: any;
@@ -15,39 +18,44 @@ type BookHotelProps = {
 };
 
 const BookHotelForm = ({ data, type = "post" }: BookHotelProps) => {
-  const paymentTypes = [
-    { value: "pay_on_reach", label: "Pay on Arrival" },
-    { value: "pay_online", label: "Pay Online" },
-  ];
+  const paymentTypes = [{ value: "pay_on_reach", label: "Pay on Arrival" }];
+
+  const navigate = useNavigate();
 
   const [createBookingMutation, { isLoading: isCreateBookingLoading }] = useCreateBookingMutation();
   const [updateBookingMutation, { isLoading: isUpdateBookingLoading }] = useUpdateBookingMutation();
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: InferType<typeof BookHotelSchema>) => {
     const payload = {
-      name: values.name,
+      customer_name: values.name,
       email: values.email,
-      phone_number: values.phone_number,
-      fromDate: values.fromDate,
-      toDate: values.toDate,
+      phone: values.phone_number,
+      from_date: values.fromDate,
+      to_date: values.toDate,
       payment_type: values.payment_type,
-      number_of_persons: values.number_of_persons,
-      message: values.message,
+      pickup_or_arrival_time: values.arrival_time,
+      persons: values.number_of_persons,
+      customer_message: values.message,
+      count: 1,
     };
 
     try {
       let res;
       if (type === "post") {
-        res = await createBookingMutation({ ...payload, is_hotel: 1, is_main: 1 }).unwrap();
+        res = await createBookingMutation({ ...payload }).unwrap();
       } else if (type === "edit") {
         res = await updateBookingMutation({ booking_id: data?.id, ...payload }).unwrap();
       }
 
-      const message = res?.data?.message || ` ${type === "post" ? "Added" : "Updated"} Hotel!`;
+      const message =
+        res?.data?.message ||
+        ` ${type === "post" ? "Booked Hotel" : "Updated booking"} successfully!`;
       toast.success(message);
+      navigate("/my-hotels", { state: { type: "bookings" } });
     } catch (error: any) {
       const message =
-        error?.response?.data?.message || `Error ${type === "post" ? "booking" : "updating"} hotel`;
+        error?.response?.data?.message ||
+        `Error ${type === "post" ? "booking hotel" : "updating booking"}`;
 
       toast.error(message);
     }
@@ -56,17 +64,17 @@ const BookHotelForm = ({ data, type = "post" }: BookHotelProps) => {
   const { values, errors, touched, setFieldValue, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
-        name: data?.name || "",
+        name: data?.customer_name || "",
         email: data?.email || "",
-        phone_number: data?.phone_number || "",
-        fromDate: data?.fromDate || "",
-        toDate: data?.toDate || "",
-        arrival_time: data?.arrival_time || "",
+        phone_number: data?.phone || "",
+        fromDate: data?.from_date || "",
+        toDate: data?.to_date || "",
+        arrival_time: data?.pickup_or_arrival_time || "",
         payment_type: data?.payment_type || "",
-        number_of_persons: data?.number_of_persons || "",
-        message: data?.message || "",
+        number_of_persons: data?.persons || "",
+        message: data?.customer_message || "",
       },
-      validationSchema: "",
+      validationSchema: BookHotelSchema,
       enableReinitialize: true,
       onSubmit,
     });

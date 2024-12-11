@@ -9,8 +9,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { FiltersType, OptionType } from "@/types";
 import { DropdownList } from "@/components/ui/components/DropdownList";
 import { useGetMarketItemsQuery } from "@/server/actions/market";
-
 import { toast } from "sonner";
+
 import SectionWrapper from "@/layouts/SectionWrapper";
 import Collection from "../_sections/Collection";
 import TableGlobalSearch from "@/components/reuseables/TableGlobalSearch";
@@ -19,6 +19,13 @@ import FallbackLoader from "@/components/fallback/FallbackLoader";
 function Listing() {
   const { data, isError, isFetching, error } = useGetMarketItemsQuery({});
   const listings = data?.data?.data;
+
+  const [searchParams] = useSearchParams();
+  const state = searchParams.get("state");
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [state]);
 
   const [sort, setSort] = useState("title-atoz");
   const [filters, setFilters] = useState<FiltersType>({});
@@ -29,7 +36,7 @@ function Listing() {
   useEffect(() => {
     if (isError) {
       const message = (error as any)?.message;
-      toast.error(message || "Error fetching data");
+      toast.error(message || "Error fetching listings");
     }
   }, [isError]);
 
@@ -84,7 +91,7 @@ function Listing() {
 
   return (
     <SectionWrapper
-      customHeaderComponentStyles={
+      customHeaderComponent={
         <div className="flex-1 hidden md:row-flex relative">
           <TableGlobalSearch
             globalValue={searchValue}
@@ -100,7 +107,7 @@ function Listing() {
 
         <section className="flex-1 flex-column w-full gap-3">
           <div className="row-flex-btwn gap-4">
-            <h2 className="">Listings</h2>
+            <h2 className="">{state ? `Listings in ${state}` : "Listings"}</h2>
 
             <DropdownList
               value={sort}

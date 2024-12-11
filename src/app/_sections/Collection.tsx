@@ -7,7 +7,7 @@ type CollectionProps = {
   emptySubText?: string;
   containerStyles?: string;
   emptyContainerStyles?: string;
-  collectionType?: "My_Listing" | "All_Listings" | "Trending_Listing" | "My_Wishlist";
+  collectionType?: "My_Listing" | "All" | "My_Bookings" | "My_Hotels" | "My_Wishlist";
   limit?: number;
   page?: number | string;
   urlParamName?: string;
@@ -30,17 +30,27 @@ function Collection({
         <>
           <ul
             className={cn(
-              "grid w-full grid-cols-1 place-items-center gap-8 py-3 sm:grid-cols-[repeat(auto-fit,_minmax(260px,_1fr))]",
+              "grid w-full grid-cols-1 items-center gap-8 py-3 sm:grid-cols-[repeat(auto-fit,_minmax(260px,_1fr))]",
               containerStyles
             )}
           >
             {data.map((item, idx) => {
               const isOwnListing = collectionType === "My_Listing";
               const isWishList = collectionType === "My_Wishlist";
+              const isBookings = collectionType === "My_Bookings";
+              const isHotels = collectionType === "My_Hotels";
 
-              return (
-                <Card item={item} key={idx} isOwnListing={isOwnListing} isWishlist={isWishList} />
-              );
+              const type = isOwnListing
+                ? "listing"
+                : isWishList
+                ? "wishlist"
+                : isBookings
+                ? "booking"
+                : isHotels
+                ? "hotel"
+                : "All";
+
+              return <Card item={item} key={idx} type={type} />;
             })}
           </ul>
         </>

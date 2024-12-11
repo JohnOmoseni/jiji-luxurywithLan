@@ -15,7 +15,6 @@ import {
   Whatsapp,
 } from "./icons";
 import { DynamicFieldType, FilterOptionsType } from "@/types";
-// import { Car } from "lucide-react";
 
 export const routes = {
   ROOT: "/",
@@ -83,33 +82,27 @@ export const locations = ["Bayelsa", "Port Harcourt", "Lagos", "Abuja"];
 export const faqs = [
   {
     label: "How do I contact Support Team",
-    value:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, quos et soluta exercitationem, vitae, veritatis itaque enim iure iusto pariatur dolorem voluptate mollitia laboriosam consequuntur expedita nulla eaque tempora placeat?",
+    value: "",
   },
   {
     label: 'What happens after I click on "Post ad"?',
-    value:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, quos et soluta exercitationem, vitae, veritatis itaque enim iure iusto pariatur dolorem voluptate mollitia laboriosam consequuntur expedita nulla eaque tempora placeat?",
+    value: "",
   },
   {
     label: "What can I do to sell better?",
-    value:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, quos et soluta exercitationem, vitae, veritatis itaque enim iure iusto pariatur dolorem voluptate mollitia laboriosam consequuntur expedita nulla eaque tempora placeat?",
+    value: "",
   },
   {
     label: "Posting rules",
-    value:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, quos et soluta exercitationem, vitae, veritatis itaque enim iure iusto pariatur dolorem voluptate mollitia laboriosam consequuntur expedita nulla eaque tempora placeat?",
+    value: "",
   },
   {
     label: "Price changes in March 2024",
-    value:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, quos et soluta exercitationem, vitae, veritatis itaque enim iure iusto pariatur dolorem voluptate mollitia laboriosam consequuntur expedita nulla eaque tempora placeat?",
+    value: "",
   },
   {
     label: "How to leave feedback about the seller?",
-    value:
-      "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minus, quos et soluta exercitationem, vitae, veritatis itaque enim iure iusto pariatur dolorem voluptate mollitia laboriosam consequuntur expedita nulla eaque tempora placeat?",
+    value: "",
   },
 ];
 
@@ -121,10 +114,10 @@ export const vehicleCategories = [
 ];
 
 export const locationCategories = [
-  { label: "Abuja", value: "abuja" },
-  { label: "Lagos", value: "lagos" },
-  { label: "Port-Harcourt", value: "portharcourt" },
-  { label: "Bayelsa", value: "bayelsa" },
+  { label: "Abuja", value: "Abuja", id: "" },
+  { label: "Lagos", value: "Lagos", id: "" },
+  { label: "Port Harcourt", value: "Port Harcourt", id: "" },
+  { label: "Bayelsa", value: "Bayelsa", id: "" },
 ];
 
 const discountCategories = [
@@ -317,6 +310,12 @@ export const categoryFields: Record<string, DynamicFieldType[]> = {
       type: FormFieldType.CHECKBOX,
       placeholder: "",
     },
+    {
+      name: "is_negotiatable",
+      label: "Is Negotiable",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
   ],
   Property: [
     {
@@ -405,6 +404,12 @@ export const categoryFields: Record<string, DynamicFieldType[]> = {
       type: FormFieldType.CHECKBOX,
       placeholder: "",
     },
+    {
+      name: "is_negotiatable",
+      label: "Is Negotiable",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
   ],
   Land: [
     {
@@ -449,9 +454,90 @@ export const categoryFields: Record<string, DynamicFieldType[]> = {
       ],
     },
     {
+      name: "is_negotiatable",
+      label: "Is Negotiable",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
+    {
       name: "is_leased",
       label: "Is Leased",
       type: FormFieldType.CHECKBOX,
+    },
+  ],
+  Hotel: [
+    {
+      name: "has_bar",
+      label: "Has Bar",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
+    {
+      name: "has_restaurant",
+      label: "Has Restaurant",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
+    {
+      name: "has_gym",
+      label: "Has   Gym",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
+    {
+      name: "has_pool",
+      label: "Has   Swimming Pool",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
+    {
+      name: "has_garden",
+      label: "Has Garden",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
+    {
+      name: "has_spa",
+      label: "Has Spa",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
+    {
+      name: "has_internet",
+      label: "Has Internet",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
+    {
+      name: "has_concierge",
+      label: "Has Concierge",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
+    {
+      name: "has_air_condition",
+      label: "Has Air Condition",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
+    {
+      name: "has_complementary_breakfast",
+      label: "Has Complementary Breakfast",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
+    {
+      name: "is_negotiatable",
+      label: "Is Negotiable",
+      type: FormFieldType.CHECKBOX,
+      placeholder: "",
+    },
+    {
+      name: "number_of_rooms",
+      label: "Number of Rooms",
+      type: FormFieldType.INPUT,
+      inputType: "number",
+      placeholder: "e.g., 10",
     },
   ],
   // Other categories
@@ -461,7 +547,7 @@ export const mainCategories = [
   { value: "Land", label: "Land", id: "1" },
   { value: "Property", label: "Apartment", id: "12" },
   { value: "Automobile", label: "Automobile", id: "23" },
-  { value: "Hotels", label: "Hotel", id: "34" },
+  { value: "Hotel", label: "Hotel", id: "34" },
 ];
 
 export const listingTypes = [
@@ -484,6 +570,10 @@ export const listingTypes = [
   {
     label: "Lease",
     value: "lease",
+  },
+  {
+    label: "Book",
+    value: "book",
   },
 ];
 

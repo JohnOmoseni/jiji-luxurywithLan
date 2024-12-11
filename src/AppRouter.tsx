@@ -27,8 +27,9 @@ import WishLists from "./app/wishlists/page";
 import PostAds from "./app/ads/PostAds";
 import Messaging from "./app/messaging/page";
 import PrivacyPolicy from "./app/policy/page";
-import HotelListings from "./app/hotel/page";
-import CreateHotel from "./app/hotel/CreateHotel";
+import MyHotelListings from "./app/hotel/page";
+import AddRoom from "./app/hotel/AddRoom";
+import ManageHotel from "./app/hotel/ManageHotel";
 
 const AppRouter = () => {
   return (
@@ -56,8 +57,17 @@ const AppRouter = () => {
 
             <Route element={<DashboardLayout />}>
               <Route path="/" element={<Home />} />
-              <Route path="/listings" element={<Listing />} />
-              <Route path="/listings/:id" element={<Details />} />
+
+              <Route path="/listings">
+                <Route index element={<Listing />} />
+                <Route path=":id" element={<Details />} />
+              </Route>
+
+              <Route path="/hotels">
+                {/* <Route index element={<HotelListings />} /> */}
+                <Route path=":id" element={<Details />} />
+              </Route>
+
               <Route path="/faqs" element={<FAQS />} />
               <Route path="/reviews/:id" element={<Reviews />} />
               <Route path="/policy" element={<PrivacyPolicy />} />
@@ -69,14 +79,25 @@ const AppRouter = () => {
                   </ProtectedRoute>
                 }
               >
-                <Route path="/my-ads" element={<Ads />} />
-                <Route path="/my-hotels" element={<HotelListings />} />
-                <Route path="/my-hotels/post" element={<CreateHotel />} />
-                <Route path="/ads/post" element={<PostAds />} />
-                <Route path="/ads/edit-advert/:id" element={<PostAds />} />
+                <Route path="/my-ads">
+                  <Route index element={<Ads />} />
+                  <Route path="post" element={<PostAds />} />
+                  <Route path="edit-advert/:id" element={<PostAds />} />
+                </Route>
+
+                <Route path="/my-hotels">
+                  <Route index element={<MyHotelListings />} />
+                  <Route path="post" element={<ManageHotel />} />
+                  <Route path="edit-hotel/:id" element={<ManageHotel />} />
+                  <Route path="add-room" element={<AddRoom />} />
+                </Route>
+
+                <Route path="/chats">
+                  <Route index element={<Messaging />} />
+                  <Route path=":id" element={<Messaging />} />
+                </Route>
+
                 <Route path="/wishlist" element={<WishLists />} />
-                <Route path="/chats" element={<Messaging />} />
-                <Route path="/chat/:id" element={<Messaging />} />
                 <Route path="/profile" element={<Profile />} />
               </Route>
             </Route>

@@ -1,10 +1,13 @@
 import { SelectItem } from "@/components/ui/select";
-import { useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useGetAllLGAsQuery, useGetAllStatesQuery } from "@/server/actions/utils";
 import { OptionType } from "@/types";
 import { useListHotelMutation, useUpdateHotelMutation } from "@/server/actions/hotel";
+import { ListHostelSchema } from "@/schema/validation";
+import { InferType } from "yup";
+import { useNavigate } from "react-router-dom";
 
 import CustomFormField, { FormFieldType } from "@/components/forms/CustomFormField";
 import FormFileUpload from "../FormFileUpload";
@@ -16,37 +19,57 @@ type ListHotelProps = {
 };
 
 const ListHostelForm = ({ data, type }: ListHotelProps) => {
-  const [files, setFiles] = useState<any[]>([]);
+  const [files, setFiles] = useState<string[]>([]);
   const [selectedState, setSelectedState] = useState("");
-  const [_hasImageUploaded, setHasImageUploaded] = useState(false);
+  const [hasImageUploaded, setHasImageUploaded] = useState(false);
+
+  const navigate = useNavigate();
 
   const { data: states } = useGetAllStatesQuery<{ data: OptionType[] }>({});
-  const { data: lgas } = useGetAllLGAsQuery<{ data: OptionType[] }>({ state_id: selectedState });
+  const { data: lgas } = useGetAllLGAsQuery<{ data: OptionType[] }>(
+    selectedState ? { state_id: selectedState } : undefined,
+    { skip: !selectedState }
+  );
 
   const [listHotelMutation, { isLoading: isListHotelLoading }] = useListHotelMutation();
   const [updateHotelMutation, { isLoading: isUpdateHotelLoading }] = useUpdateHotelMutation();
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (
+    values: InferType<typeof ListHostelSchema>,
+    actions: FormikHelpers<any>
+  ) => {
+    if (!hasImageUploaded || files.length < 2) {
+      toast.info("Please upload at least 2 images for the ad");
+      return;
+    }
+
     const payload = {
       name: values.name,
-      area: values.district,
+      area: values.area,
       state_id: values.state,
       lga_id: values.lga,
       address: values.address,
       office_front: files[0],
-      media: [...files],
     };
 
     try {
       let res;
       if (type === "post") {
-        res = await listHotelMutation({ ...payload, is_hotel: 1, is_main: 1 }).unwrap();
+        res = await listHotelMutation({
+          ...payload,
+          media: files.slice(1),
+          is_hotel: 1,
+          is_main: 1,
+        }).unwrap();
       } else if (type === "edit") {
         res = await updateHotelMutation({ hotel_id: data?.id, ...payload }).unwrap();
       }
 
       const message = res?.data?.message || `${type === "post" ? "Added" : "Updated"} Hotel!`;
       toast.success(message);
+      actions.resetForm();
+
+      navigate("/my-hotels", { state: { type: "hotels" } });
     } catch (error: any) {
       const message =
         error?.response?.data?.message || `Error ${type === "post" ? "listing" : "updating"} hotel`;
@@ -64,7 +87,7 @@ const ListHostelForm = ({ data, type }: ListHotelProps) => {
         state: data?.state_id ? String(data?.state_id) : "",
         lga: data?.lga_id ? String(data?.lga_id) : "",
       },
-      validationSchema: "",
+      validationSchema: ListHostelSchema,
       enableReinitialize: true,
       onSubmit,
     });
@@ -80,7 +103,7 @@ const ListHostelForm = ({ data, type }: ListHotelProps) => {
         <CustomFormField
           fieldType={FormFieldType.INPUT}
           name="name"
-          label="Title/Name"
+          label="Name"
           onBlur={handleBlur}
           errors={errors}
           touched={touched}
@@ -180,12 +203,12 @@ const ListHostelForm = ({ data, type }: ListHotelProps) => {
             touched={touched}
             renderSkeleton={() => (
               <FormFileUpload
-                title="Upload Images (At least 5 images)"
+                title="Upload Images (At least 2 images)"
                 name="mediaImage"
                 setHasImageUploaded={setHasImageUploaded}
                 images={
-                  Array.isArray(data?.media) && data?.media?.length > 0
-                    ? data?.media?.map((file: any) => file?.file_url)
+                  Array.isArray(data?.media)
+                    ? [...data?.media?.map((file: any) => file?.file_url), data?.office_front]
                     : []
                 }
                 onFileChange={(files) => setFiles(files)}

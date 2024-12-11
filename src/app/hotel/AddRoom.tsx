@@ -15,20 +15,20 @@ import {
 import { useGetAllLGAsQuery, useGetAllStatesQuery } from "@/server/actions/utils";
 
 import SectionWrapper from "@/layouts/SectionWrapper";
-import PostSuccess from "../_sections/PostSuccess";
-import PostAdForm from "@/components/forms/ads/PostAdForm";
 import BackArrow from "@/components/reuseables/BackArrow";
-import PostAdForm2 from "@/components/forms/ads/PostAdForm2";
 import FallbackLoader from "@/components/fallback/FallbackLoader";
+import PostSuccess from "../_sections/PostSuccess";
+import AddRoomsForm from "@/components/forms/hotels/AddRoomsForm";
+import AddRoomsForm2 from "@/components/forms/hotels/AddRoomsForm2";
 
-function PostAds() {
+function AddRoom() {
   const { id: listing_id } = useParams();
   const { state } = useLocation();
-  const category = state?.category || "Land";
+  const category = state?.category || "Hotel";
   const type = state?.type || "post";
 
   const {
-    data: postData,
+    data: hotelData,
     isLoading: fetchingListing,
     isError,
     error,
@@ -37,7 +37,7 @@ function PostAds() {
   useEffect(() => {
     if (isError) {
       const message = (error as any)?.message || (error as any)?.data?.message;
-      toast.error(message || "Error fetching listing data");
+      toast.error(message || "Error fetching hotel data");
     }
   }, [isError]);
 
@@ -45,15 +45,15 @@ function PostAds() {
   const [files, setFiles] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dynamicFields, setDynamicFields] = useState<DynamicFieldType[]>([]);
-  const [staticFields, setStaticFields] = useState<FormValues | null>(postData?.data || null);
+  const [staticFields, setStaticFields] = useState<FormValues | null>(hotelData?.data || null);
   const [selectedState, setSelectedState] = useState("");
 
   const [categoryType, setCategoryType] = useState<CategoryTypes>(category);
 
   const { data: states } = useGetAllStatesQuery({});
   const { data: lgas } = useGetAllLGAsQuery(
-    { state_id: selectedState || postData?.data?.state_id },
-    { skip: !selectedState && !postData?.data?.state_id }
+    { state_id: selectedState || hotelData?.data?.state_id },
+    { skip: !selectedState && !hotelData?.data?.state_id }
   );
 
   const [addListingMutation] = useAddListingMutation();
@@ -62,10 +62,10 @@ function PostAds() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (postData?.data) {
-      setStaticFields(postData.data);
+    if (hotelData?.data) {
+      setStaticFields(hotelData.data);
     }
-  }, [postData]);
+  }, [hotelData]);
 
   const onSubmit = async (dynamicValues: any) => {
     setIsLoading(true);
@@ -98,6 +98,7 @@ function PostAds() {
       district: values?.district,
       media: [...files],
       ...dynamicFieldsObj,
+      number_of_rooms: values?.number_of_rooms || 1,
     };
 
     console.log("FORM VALUES", files, data);
@@ -106,21 +107,21 @@ function PostAds() {
       let message;
       if (type === "post") {
         await addListingMutation(data).unwrap();
-        message = "Posted Ad Successfully";
+        message = "Room Added Successfully";
       } else if (type === "edit") {
         await editListingMutation({ listing_id: 1, ...data }).unwrap();
 
-        message = "Edited Ad Successfully";
+        message = "Room Updated Successfully";
       }
 
-      toast.success(message || `Uploaded Successfully`);
+      toast.success(message);
       navigate("/my-ads");
     } catch (error: any) {
       const message = error?.response?.data?.message || error?.data?.message;
 
       console.log("UPLOAD ERROR", error);
 
-      toast.error(message || "Error uploading");
+      toast.error(message || "Error adding  room");
     } finally {
       setIsLoading(false);
     }
@@ -128,7 +129,7 @@ function PostAds() {
 
   const { values, errors, touched, setFieldValue, handleBlur, handleChange, handleSubmit } =
     useFormik({
-      initialValues: generateInitialValues(categoryType, postData?.data),
+      initialValues: generateInitialValues(categoryType, hotelData?.data),
       validationSchema: "",
       onSubmit,
       enableReinitialize: true,
@@ -176,10 +177,10 @@ function PostAds() {
           )}
 
           <div>
-            <h3 className="">{type === "edit" ? "Edit" : "Post"} Advert</h3>
+            <h3 className="">{type === "edit" ? "Edit" : "Add"} Room</h3>
             {step === 1 && (
               <p className="text-grey text-xs mt-1 max-w-[50ch]">
-                Please provide the necessary details about your ad.
+                Please provide the necessary details about your room.
               </p>
             )}
           </div>
@@ -191,7 +192,7 @@ function PostAds() {
           ) : (
             <>
               <div className={cn("block", step === 1 ? "block" : "hidden")}>
-                <PostAdForm
+                <AddRoomsForm
                   step={step}
                   data={form1Values || staticFields}
                   nextStep={handleForm1Submit}
@@ -207,7 +208,7 @@ function PostAds() {
               </div>
 
               {step === 2 && (
-                <PostAdForm2
+                <AddRoomsForm2
                   step={step}
                   prevStep={prevStep}
                   isLoading={isLoading}
@@ -221,7 +222,7 @@ function PostAds() {
                   dynamicFields={dynamicFields}
                 />
               )}
-              {step === 3 && <PostSuccess />}
+              {step === 3 && <PostSuccess title="" />}
             </>
           )}
         </div>
@@ -230,4 +231,4 @@ function PostAds() {
   );
 }
 
-export default PostAds;
+export default AddRoom;

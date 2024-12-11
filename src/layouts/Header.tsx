@@ -2,6 +2,7 @@ import {
   Adverts,
   ArrowRight,
   Chatbox,
+  HotelIcon,
   KeyboardArrowDown,
   Logo,
   LogoutIcon,
@@ -22,16 +23,18 @@ import Button from "@/components/reuseables/CustomButton";
 import TooltipWrapper from "@/components/ui/components/TooltipWrapper";
 
 interface HeaderProps {
-  customHeaderComponentStyles?: React.ReactNode;
+  customHeaderComponent?: React.ReactNode;
+  customActionHeaderButton?: React.ReactNode;
 }
 
-function Header({ customHeaderComponentStyles }: HeaderProps) {
+function Header({ customHeaderComponent, customActionHeaderButton }: HeaderProps) {
   const { handleLogout, isLoadingAuth, user } = useAuth();
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const { selectedCategory } = useAppSelector((state) => state.appState);
-  const isPostPage = pathname.includes("/post");
+  const isPostPage = pathname.includes("/post") || pathname.includes("/add-room");
+  const isMyHotelsPage = pathname.includes("/my-hotels");
 
   const onLogout = async () => {
     await handleLogout();
@@ -44,7 +47,7 @@ function Header({ customHeaderComponentStyles }: HeaderProps) {
           <Logo className="w-fit h-10" />
         </Link>
 
-        {customHeaderComponentStyles && customHeaderComponentStyles}
+        {customHeaderComponent && customHeaderComponent}
 
         <div className="row-flex ml-auto max-[340px]:gap-2 gap-3">
           {!user ? (
@@ -56,6 +59,15 @@ function Header({ customHeaderComponentStyles }: HeaderProps) {
             </Link>
           ) : (
             <>
+              <TooltipWrapper
+                trigger={
+                  <Link to="/my-hotels" className="icon-div">
+                    <HotelIcon className="size-3 sm:size-4" />
+                  </Link>
+                }
+                content="Manage Hotels"
+              />
+
               <TooltipWrapper
                 trigger={
                   <Link to="/wishlist" className="icon-div">
@@ -136,12 +148,14 @@ function Header({ customHeaderComponentStyles }: HeaderProps) {
             )}
           </div>
 
+          {customActionHeaderButton && customActionHeaderButton}
+
           <Button
             icon={Plus}
-            title="Post"
+            title={isMyHotelsPage ? "Add Rooms" : "Post"}
             className={cn(
               "group-hover:scale-95 max-[400px]:!px-2.5 max-[400px]:!gap-1",
-              isPostPage && "!hidden"
+              (isPostPage || isMyHotelsPage) && "!hidden"
             )}
             onClick={() =>
               user

@@ -109,13 +109,13 @@ const FilterSection = ({ refetch }: Props) => {
     // Create query string from filters, only including non-empty values
     const queryParams = new URLSearchParams();
 
-    if (searchQuery) queryParams.set("q", searchQuery);
-    if (selectedLocation) queryParams.set("location", selectedLocation);
+    if (searchQuery) queryParams.set("search", searchQuery);
+    if (selectedLocation) queryParams.set("state_id", selectedLocation);
     if (selectedType) queryParams.set("type", selectedType);
     if (selectedCategory && selectedCategory !== "all") {
-      queryParams.set("main_category", selectedCategory);
+      queryParams.set("main_category_id", selectedCategory);
     }
-    if (selectedPropertyType) queryParams.set("sub_category", selectedPropertyType);
+    if (selectedPropertyType) queryParams.set("land_type", selectedPropertyType);
 
     // Only proceed if we have any query parameters
     if (queryParams.toString()) {

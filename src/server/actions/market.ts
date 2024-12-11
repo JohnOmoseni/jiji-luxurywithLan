@@ -24,17 +24,21 @@ export const marketSlice = api.injectEndpoints({
       invalidatesTags: () => [{ type: "Market" }] as any,
     }),
 
-    bookProperty: builder.mutation({
+    bookHotel: builder.mutation({
       query: ({ property_id, ...payload }) => ({
         url: `/market/properties/${property_id}/book`,
         method: "POST",
         body: payload,
       }),
-      invalidatesTags: () => [{ type: "Market" }] as any,
+      invalidatesTags: () => [{ type: "Market" }, { type: "Bookings" }] as any,
     }),
   }),
   overrideExisting: false, // To avoid overwriting existing endpoints
 });
 
-export const { useGetMarketItemsQuery, useGetItemByIDQuery, useRequestCallbackMutation } =
-  marketSlice;
+export const {
+  useGetMarketItemsQuery,
+  useGetItemByIDQuery,
+  useRequestCallbackMutation,
+  useBookHotelMutation,
+} = marketSlice;
