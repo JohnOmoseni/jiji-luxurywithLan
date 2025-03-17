@@ -37,7 +37,7 @@ const Footer = () => {
         <div className="flex-column flex w-full justify-between gap-8 md:gap-12 md:flex-row">
           <div className="flex flex-row flex-wrap sm:flex-col gap-4">
             <a
-              href="https://play.google.com/store/apps/details?id=com.qataloogAndroid.qataloog&pli=1"
+              href="https://play.google.com/store/apps/details?id=app.skymeasures.luxurywithlan"
               target="_blank"
               rel="noopener noreferrer"
               className="w-40 md:w-fit md:min-w-32"
@@ -45,7 +45,7 @@ const Footer = () => {
               <img src={googleplayicon} alt="Google Play" className="w-full" />
             </a>
             <a
-              href="https://apps.apple.com/us/app/qataloog/id6471869090"
+              href="https://play.google.com/store/apps/details?id=app.skymeasures.luxurywithlan"
               target="_blank"
               rel="noopener noreferrer"
               className="w-40 md:w-fit md:min-w-32"
