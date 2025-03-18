@@ -108,7 +108,7 @@ function Card({ item, type }: CardProps) {
   ) : (
     <li className="flex-column group relative w-full overflow-hidden transition-sm max-sm:min-w-[280px] md:max-w-[380px] min-h-[320px] rounded-xl">
       <Link
-        to={`/listings}/${item.id}`}
+        to={`/listings/${item.id}`}
         className="flex min-h-[220px] w-full flex-grow flex-shrink-0 bg-cover bg-no-repeat bg-center overflow-hidden rounded-b bg-slate-300"
         style={{ backgroundImage: `url(${item?.main_thumbnail})` }}
       />
